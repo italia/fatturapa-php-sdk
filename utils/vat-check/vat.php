@@ -1,4 +1,3 @@
-<!-- riccardo git flow -->
 <?php
 $countries = array(
   "IT",
