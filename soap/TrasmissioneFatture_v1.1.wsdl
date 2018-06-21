@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soapbind="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:types="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0/types"
+	xmlns:tns="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0"
+	targetNamespace="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0">
+
+	<!-- TIPI -->
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:import namespace="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0/types" schemaLocation="TrasmissioneTypes_v1.1.xsd"/>
+		</xsd:schema>
+	</wsdl:types>
+
+	<!-- MESSAGGI -->
+	<wsdl:message name="RicevutaConsegnaFatture_Msg">
+		<wsdl:part name="ricevuta" element="types:ricevutaConsegna" />
+	</wsdl:message>
+	<wsdl:message name="NotificaMancataConsegnaFatture_Msg">
+		<wsdl:part name="mancataConsegna" element="types:notificaMancataConsegna" />
+	</wsdl:message>
+	<wsdl:message name="NotificaScartoFatture_Msg">
+		<wsdl:part name="scarto" element="types:notificaScarto" />
+	</wsdl:message>
+	<wsdl:message name="NotificaEsitoFatture_Msg">
+		<wsdl:part name="esito" element="types:notificaEsito" />
+	</wsdl:message>
+	<wsdl:message name="NotificaDecorrenzaTerminiFatture_Msg">
+		<wsdl:part name="decorrenzaTermini" element="types:notificaDecorrenzaTermini" />
+	</wsdl:message>
+	<wsdl:message name="AttestazioneTrasmissioneFattura_Msg">
+		<wsdl:part name="attestazioneTrasmissioneFattura" element="types:attestazioneTrasmissioneFattura" />
+	</wsdl:message>
+
+	<!-- PORT TYPE -->
+	<wsdl:portType name="TrasmissioneFatture">
+		<wsdl:operation name="RicevutaConsegna">
+			<wsdl:input message="tns:RicevutaConsegnaFatture_Msg" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="NotificaMancataConsegna">
+			<wsdl:input message="tns:NotificaMancataConsegnaFatture_Msg" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="NotificaScarto">
+			<wsdl:input message="tns:NotificaScartoFatture_Msg" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="NotificaEsito">
+			<wsdl:input message="tns:NotificaEsitoFatture_Msg" />
+		</wsdl:operation>
+				
+		<wsdl:operation name="NotificaDecorrenzaTermini">
+			<wsdl:input message="tns:NotificaDecorrenzaTerminiFatture_Msg" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="AttestazioneTrasmissioneFattura">
+			<wsdl:input message="tns:AttestazioneTrasmissioneFattura_Msg" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- PORT BINDING -->
+	<wsdl:binding name="TrasmissioneFatture_binding" type="tns:TrasmissioneFatture">
+		<soapbind:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+
+		<wsdl:operation name="RicevutaConsegna">
+			<soapbind:operation soapAction="http://www.fatturapa.it/TrasmissioneFatture/RicevutaConsegna" />
+			<wsdl:input>
+				<soapbind:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		
+		<wsdl:operation name="NotificaMancataConsegna">
+			<soapbind:operation soapAction="http://www.fatturapa.it/TrasmissioneFatture/NotificaMancataConsegna" />
+			<wsdl:input>
+				<soapbind:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		
+		<wsdl:operation name="NotificaScarto">
+			<soapbind:operation soapAction="http://www.fatturapa.it/TrasmissioneFatture/NotificaScarto" />
+			<wsdl:input>
+				<soapbind:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		
+		<wsdl:operation name="NotificaEsito">
+			<soapbind:operation soapAction="http://www.fatturapa.it/TrasmissioneFatture/NotificaEsito" />
+			<wsdl:input>
+				<soapbind:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		
+		<wsdl:operation name="NotificaDecorrenzaTermini">
+			<soapbind:operation soapAction="http://www.fatturapa.it/TrasmissioneFatture/NotificaDecorrenzaTermini" />
+			<wsdl:input>
+				<soapbind:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+		
+		<wsdl:operation name="AttestazioneTrasmissioneFattura">
+			<soapbind:operation soapAction="http://www.fatturapa.it/TrasmissioneFatture/AttestazioneTrasmissioneFattura" />
+			<wsdl:input>
+				<soapbind:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="TrasmissioneFatture_service">
+		<wsdl:port name="TrasmissioneFatture_port" binding="tns:TrasmissioneFatture_binding">
+			<soapbind:address location="http://servizi.fatturapa.it/TrasmissioneFatture" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

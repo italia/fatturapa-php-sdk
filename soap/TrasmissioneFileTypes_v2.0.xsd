@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd"
+	xmlns:tns="http://ivaservizi.agenziaentrate.gov.it/docs/wsdl/trasmissionefile/v2.0"
+	targetNamespace="http://ivaservizi.agenziaentrate.gov.it/docs/wsdl/trasmissionefile/v2.0"
+	version="2.0">
+
+	<!-- ELEMENTI MESSAGGI -->
+	<xsd:element name="file" type="tns:File_Type" />
+	<xsd:element name="rispostaFile" type="tns:RispostaFile_Type" />
+	<xsd:element name="esito" type="tns:Esito_Type" />
+	<xsd:element name="rispostaEsito" type="tns:RispostaEsito_Type" />
+	
+	<!-- TIPI PER MESSAGGI -->
+	<xsd:complexType name="File_Type">
+		<xsd:sequence>
+			<xsd:element name="NomeFile" type="tns:NomeFile_Type" />
+			<xsd:element name="TipoFile" type="tns:TipoFile_Type" />
+			<xsd:element name="File" type="xsd:base64Binary" xmime:expectedContentTypes="*/*" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="RispostaFile_Type">
+		<xsd:sequence>
+			<xsd:element name="IDFile" type="tns:IDFile_Type" />
+			<xsd:element name="DataOraRicezione" type="xsd:dateTime" />
+			<xsd:element name="Errore" type="tns:ErroreInvio_Type" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="Esito_Type">
+		<xsd:sequence>
+			<xsd:element name="IDFile" type="tns:IDFile_Type" />
+		</xsd:sequence>
+	</xsd:complexType>
+		
+	<xsd:complexType name="RispostaEsito_Type">
+		<xsd:sequence>
+			<xsd:element name="Esito" type="tns:StatoFile_Type" />
+			<xsd:element name="Notifica" type="tns:Notifica_Type" minOccurs="0" />
+			<xsd:element name="DettaglioArchivio" type="tns:dettaglioArchiovio_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Errore" type="tns:Errore_Type" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- TIPI COMPLESSI -->
+	<xsd:complexType name="Notifica_Type">
+		<xsd:sequence>
+			<xsd:element name="NomeFile" type="tns:NomeFile_Type" />
+			<xsd:element name="File" type="xsd:base64Binary" xmime:expectedContentTypes="*/*" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="dettaglioArchiovio_Type">
+		<xsd:sequence>
+			<xsd:element name="NomeFile" type="tns:NomeFile_Type" />
+			<xsd:element name="IDFile" type="tns:IDFile_Type" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- SIMPLE TYPES -->
+	<xsd:simpleType name="IDFile_Type">
+		<xsd:restriction base="xsd:positiveInteger">
+			<xsd:minInclusive value="1" />
+			<xsd:maxInclusive value="999999999999999" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="TipoFile_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:annotation>
+		      <xsd:documentation>I valori sono pubblicati sul sito dell'Agenzia delle Entrate</xsd:documentation>
+		    </xsd:annotation>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="NomeFile_Type">
+		<xsd:restriction base="xsd:normalizedString">
+			<xsd:pattern value="[a-zA-Z0-9_\.]{9,50}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="ErroreInvio_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="EI01">
+				<xsd:annotation>
+					<xsd:documentation>
+						EI01 = FILE VUOTO
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			
+			<xsd:enumeration value="EI02" >
+				<xsd:annotation>
+					<xsd:documentation>
+						EI02 = SERVIZIO NON DISPONIBILE
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			
+			<xsd:enumeration value="EI03" >
+				<xsd:annotation>
+					<xsd:documentation>
+						EI03 = UTENTE NON ABILITATO
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			
+			<xsd:enumeration value="EI04" >
+				<xsd:annotation>
+					<xsd:documentation>
+						EI04 = TIPO FILE NON CORRETTO
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="StatoFile_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="SF01">
+				<xsd:annotation>
+					<xsd:documentation>
+						SF01 = IN ELABORAZIONE
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			
+			<xsd:enumeration value="SF02" >
+				<xsd:annotation>
+					<xsd:documentation>
+						SF02 = ELABORATO
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			
+			<xsd:enumeration value="SF03" >
+				<xsd:annotation>
+					<xsd:documentation>
+						SF03 = ERRORE
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="Errore_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="EE01" >
+				<xsd:annotation>
+					<xsd:documentation>
+						EE01 = SERVIZIO NON DISPONIBILE
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			
+			<xsd:enumeration value="EE02" >
+				<xsd:annotation>
+					<xsd:documentation>
+						EE02 = UTENTE NON ABILITATO
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+</xsd:schema>
