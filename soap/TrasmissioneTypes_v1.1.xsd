@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd"
+	xmlns:types="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0/types"
+	targetNamespace="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0/types"
+	version="1.1">
+
+	<!-- ELEMENT -->
+	<xsd:element name="fileSdIAccoglienza" type="types:fileSdIBase_Type"/>
+	<xsd:element name="fileSdI" type="types:fileSdI_Type"/>
+	<xsd:element name="rispostaSdIRiceviFile" type="types:rispostaSdIRiceviFile_Type"/>
+	<xsd:element name="ricevutaConsegna" type="types:fileSdI_Type"/>
+	<xsd:element name="notificaMancataConsegna" type="types:fileSdI_Type"/>
+	<xsd:element name="notificaScarto" type="types:fileSdI_Type"/>
+	<xsd:element name="notificaEsito" type="types:fileSdI_Type"/>
+	<xsd:element name="notificaDecorrenzaTermini" type="types:fileSdI_Type"/>
+	<xsd:element name="attestazioneTrasmissioneFattura" type="types:fileSdI_Type"/>
+				
+	<!-- COMPLEX TYPES -->
+	<xsd:complexType name="fileSdIBase_Type">
+		<xsd:sequence>
+			<xsd:element name="NomeFile" type="types:nomeFile_Type" />
+			<xsd:element name="File" type="xsd:base64Binary" xmime:expectedContentTypes="*/*" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="fileSdI_Type">
+		<xsd:sequence>
+			<xsd:element name="IdentificativoSdI" type="types:identificativoSdI_Type" />
+			<xsd:element name="NomeFile" type="types:nomeFile_Type" />
+			<xsd:element name="File" type="xsd:base64Binary" xmime:expectedContentTypes="*/*" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="rispostaSdIRiceviFile_Type">
+		<xsd:sequence>
+			<xsd:element name="IdentificativoSdI" type="types:identificativoSdI_Type" />
+			<xsd:element name="DataOraRicezione" type="xsd:dateTime" />
+			<xsd:element name="Errore" type="types:erroreInvio_Type" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- SIMPLE TYPES -->
+	<xsd:simpleType name="identificativoSdI_Type">
+		<xsd:restriction base="xsd:integer">
+			<xsd:totalDigits value="12" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="nomeFile_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[a-zA-Z0-9_\.]{9,50}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="erroreInvio_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="EI01">
+				<xsd:annotation>
+					<xsd:documentation>
+						EI01 = FILE VUOTO
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			
+			<xsd:enumeration value="EI02" >
+				<xsd:annotation>
+					<xsd:documentation>
+						EI02 = SERVIZIO NON DISPONIBILE
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			
+			<xsd:enumeration value="EI03" >
+				<xsd:annotation>
+					<xsd:documentation>
+						EI03 = UTENTE NON ABILITATO
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+</xsd:schema>
