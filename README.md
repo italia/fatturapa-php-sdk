@@ -7,6 +7,5 @@ La documentazione tecnica dell'SdI è disponibile al seguente url http://www.fat
 Sostanzialmente si basa sulla SOAP extension di PHP sia come client che come server.
 
 ## Configurazione
-```
+
 Modificare il file soap/config.php con i propri parametri
-```
