@@ -1,4 +1,6 @@
 <?php
+ini_set( "soap.wsdl_cache_enabled", 0 );
+ini_set( 'soap.wsdl_cache_ttl', 0 );
 include("../config.php");
 
 $client = new SoapClient( $eptft, array( 'cache_wsdl' => WSDL_CACHE_NONE ));
