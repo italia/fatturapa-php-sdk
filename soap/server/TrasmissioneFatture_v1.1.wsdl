@@ -111,7 +111,7 @@
 
 	<wsdl:service name="TrasmissioneFatture_service">
 		<wsdl:port name="TrasmissioneFatture_port" binding="tns:TrasmissioneFatture_binding">
-			<soapbind:address location="http://servizi.fatturapa.it/TrasmissioneFatture" />
+			<soapbind:address location="https://teamdigitale1.simevo.com/enrico/soap/server/trasmissione-fatture.php" />
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
