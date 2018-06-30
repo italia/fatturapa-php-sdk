@@ -3,7 +3,17 @@ ini_set( "soap.wsdl_cache_enabled", 0 );
 ini_set( 'soap.wsdl_cache_ttl', 0 );
 include("../config.php");
 
-$client = new SoapClient( $eptft, array( 'cache_wsdl' => WSDL_CACHE_NONE ));
+$client = new SoapClient($eptft, array(
+    //'trace' => 1,
+    'stream_context' => stream_context_create(array(
+    	'cache_wsdl' => WSDL_CACHE_NONE,
+        'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false, 
+            'allow_self_signed' => true //can fiddle with this one.
+        )
+    ))
+ ));
 
 function print_output($response)
 {
