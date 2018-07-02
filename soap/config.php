@@ -1,7 +1,7 @@
 <?php
 
 //server trasmittente
-$st 	= "http://localhost/fatturapa-php-sdk/soap/server/";
+$st 	= "https://teamdigitale1.simevo.com/enrico/soap/server/";
 
 //wsdl trasmissione fatture
 $tfwsdl = "TrasmissioneFatture_v1.1.wsdl";
