@@ -5,9 +5,8 @@ include("../config.php");
 
 /*
 *	I seguenti end point vengono esposti dal trasmittente
-*	per ricevere i messaggi inviati dall'SDI
-*	in seguito alla trasmissione di una fattura.
-*	E' possibile simulare le chiamate a questi end point dal file /client/tf_ricezione_msg.php
+*	per ricevere le fatture inviate tramite SDI
+*	E' possibile simulare le chiamate a questi end point dal file /client/tf_ricezione_fatture.php
 */
 
 function riceviFatture() {
@@ -23,7 +22,7 @@ function notificaDecorrenzaTermini() {
 }
 
 
-$server = new SoapServer( $tfwsdl );
+$server = new SoapServer( $rfwsdl );
 
 $server->addFunction( "riceviFatture" );
 $server->addFunction( "notificaDecorrenzaTermini" );

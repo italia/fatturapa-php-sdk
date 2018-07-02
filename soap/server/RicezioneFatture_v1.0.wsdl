@@ -63,7 +63,7 @@
 
 	<wsdl:service name="RicezioneFatture_service">
 		<wsdl:port name="RicezioneFatture_port" binding="tns:RicezioneFatture_binding">
-			<soapbind:address location="http://servizi.fatturapa.it/RicezioneFatture" />
+			<soapbind:address location="https://teamdigitale1.simevo.com/enrico/soap/server/ricezione-fatture.php" />
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
