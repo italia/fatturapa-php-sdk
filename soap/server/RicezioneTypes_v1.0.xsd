@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd"
+	xmlns:types="http://www.fatturapa.gov.it/sdi/ws/ricezione/v1.0/types"
+	targetNamespace="http://www.fatturapa.gov.it/sdi/ws/ricezione/v1.0/types"
+	version="1.0">
+
+	<!-- ELEMENT -->
+	<xsd:element name="fileSdI" type="types:fileSdI_Type"/>
+	<xsd:element name="rispostaRiceviFatture" type="types:rispostaRiceviFatture_Type"/>
+	<xsd:element name="fileSdIConMetadati" type="types:fileSdIConMetadati_Type"/>
+	<xsd:element name="rispostaSdINotificaEsito" type="types:rispostaSdINotificaEsito_Type"/>
+	<xsd:element name="notificaEsito" type="types:fileSdI_Type"/>
+	<xsd:element name="notificaDecorrenzaTermini" type="types:fileSdI_Type"/>
+				
+	<!-- COMPLEX TYPES -->
+	<xsd:complexType name="fileSdIBase_Type">
+		<xsd:sequence>
+			<xsd:element name="NomeFile" type="types:nomeFile_Type" />
+			<xsd:element name="File" type="xsd:base64Binary" xmime:expectedContentTypes="*/*" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="fileSdI_Type">
+		<xsd:sequence>
+			<xsd:element name="IdentificativoSdI" type="types:identificativoSdI_Type" />
+			<xsd:element name="NomeFile" type="types:nomeFile_Type" />
+			<xsd:element name="File" type="xsd:base64Binary" xmime:expectedContentTypes="*/*" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="fileSdIConMetadati_Type">
+		<xsd:sequence>
+			<xsd:element name="IdentificativoSdI" type="types:identificativoSdI_Type" />
+			<xsd:element name="NomeFile" type="types:nomeFile_Type" />
+			<xsd:element name="File" type="xsd:base64Binary" xmime:expectedContentTypes="*/*" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"/>
+			<xsd:element name="NomeFileMetadati" type="types:nomeFile_Type" />
+			<xsd:element name="Metadati" type="xsd:base64Binary" xmime:expectedContentTypes="*/*" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="rispostaRiceviFatture_Type">
+		<xsd:sequence>
+			<xsd:element name="Esito" type="types:esitoRicezione_Type" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="rispostaSdINotificaEsito_Type">
+		<xsd:sequence>
+			<xsd:element name="Esito" type="types:esitoNotifica_Type" />
+			<xsd:element name="ScartoEsito" type="types:fileSdIBase_Type" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- SIMPLE TYPES -->
+	<xsd:simpleType name="identificativoSdI_Type">
+		<xsd:restriction base="xsd:integer">
+			<xsd:totalDigits value="12" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="nomeFile_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[a-zA-Z0-9_\.]{9,50}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="esitoRicezione_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ER01">
+				<xsd:annotation>
+					<xsd:documentation>
+						ER01 = PRESA IN CARICO
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="esitoNotifica_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ES00">
+				<xsd:annotation>
+					<xsd:documentation>
+						ES00 = NOTIFICA NON ACCETTATA
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+
+			<xsd:enumeration value="ES01">
+				<xsd:annotation>
+					<xsd:documentation>
+						ES01 = NOTIFICA ACCETTATA
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+
+			<xsd:enumeration value="ES02">
+				<xsd:annotation>
+					<xsd:documentation>
+						ES02 = SERVIZIO NON DISPONIBILE
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
