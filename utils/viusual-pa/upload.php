@@ -4,11 +4,13 @@ $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
 $FileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
-// Check if file already exists
+/* Check if file already exists
 if (file_exists($target_file)) {
     echo "Sorry, file already exists.";
     $uploadOk = 0;
 }
+*/
+
 // Check file size
 if ($_FILES["fileToUpload"]["size"] > 500000) {
     echo "Sorry, your file is too large.";
@@ -31,7 +33,6 @@ if ($uploadOk == 0) {
         echo "Sorry, there was an error uploading your file.";
     }
 }
-
 
 function read() {
     $path = $_SERVER['SERVER_NAME'] . dirname($_SERVER['REQUEST_URI']) . "/" . basename($_FILES["fileToUpload"]["name"]);    
