@@ -1,0 +1,55 @@
+* {
+    display: block;
+    font-family: arial;
+	padding: 0;
+}
+
+FatturaElettronicaHeader:before {
+    content: "Intestazione: ";
+	font-size: 24px;
+	display: table-header-group;
+}
+FatturaElettronicaHeader, FatturaElettronicaBody {
+    display: table;
+	width: 100%;
+}
+
+FatturaElettronicaHeader > *, FatturaElettronicaBody > * {
+    border: 1px solid #000;
+	padding: 10px;
+	margin: 10px;
+	background-color: #dedede;
+}
+
+DatiTrasmissione:before {
+    content: "Dati Trasmissione: ";
+	margin-bottom: 5px;
+}
+
+DatiTrasmissione {
+	display: table-cell;
+	margin-top: 10px;
+}
+
+  
+CedentePrestatore:before {
+    content: "Cedente Prestazione: ";
+}
+CedentePrestatore {
+	display: table-cell;
+}
+
+CessionarioCommittente:before {
+    content: "Cessionario Committente: ";
+}
+CessionarioCommittente {
+    display: table-cell;
+}
+
+FatturaElettronicaBody:before {
+    content: "Corpo della fattura elettronica: ";
+	font-size: 24px;
+}
+
+FatturaElettronicaBody {
+}
