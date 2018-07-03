@@ -1,0 +1,20 @@
+Per far funzionare https://teamdigitale1.simevo.com/enrico/soap/client/tf_ricezione_msg.php, quindi sulla VM si è reso necessario cambiare
+
+	<wsdl:service name="TrasmissioneFatture_service">
+		<wsdl:port name="TrasmissioneFatture_port" binding="tns:TrasmissioneFatture_binding">
+			<soapbind:address location="http://servizi.fatturapa.it/TrasmissioneFatture" />
+		</wsdl:port>
+	</wsdl:service>
+
+in
+
+	<wsdl:service name="TrasmissioneFatture_service">
+		<wsdl:port name="TrasmissioneFatture_port" binding="tns:TrasmissioneFatture_binding">
+			<soapbind:address location="https://teamdigitale1.simevo.com/enrico/soap/server/trasmissione-fatture.php" />
+		</wsdl:port>
+	</wsdl:service>
+
+(in fondo al file)
+
+
+
