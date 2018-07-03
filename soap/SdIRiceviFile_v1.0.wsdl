@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soapbind="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:types="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0/types"
+	xmlns:tns="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0"
+	targetNamespace="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0">
+
+	<!-- TIPI -->
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:import namespace="http://www.fatturapa.gov.it/sdi/ws/trasmissione/v1.0/types" schemaLocation="TrasmissioneTypes_v1.0.xsd"/>
+		</xsd:schema>
+	</wsdl:types>
+
+	<!-- MESSAGGI -->
+	<wsdl:message name="richiestaSdIRiceviFile_Msg">
+		<wsdl:part name="parametersIn" element="types:fileSdIAccoglienza" />
+	</wsdl:message>
+
+	<wsdl:message name="rispostaSdIRiceviFile_Msg">
+		<wsdl:part name="parametersOut" element="types:rispostaSdIRiceviFile" />
+	</wsdl:message>
+
+	<!-- PORT TYPE -->
+	<wsdl:portType name="SdIRiceviFile">
+		<wsdl:operation name="RiceviFile">
+			<wsdl:input message="tns:richiestaSdIRiceviFile_Msg" />
+			<wsdl:output message="tns:rispostaSdIRiceviFile_Msg" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- PORT BINDING -->
+	<wsdl:binding name="SdIRiceviFile_binding" type="tns:SdIRiceviFile">
+		<soapbind:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+
+		<wsdl:operation name="RiceviFile">
+			<soapbind:operation soapAction="http://www.fatturapa.it/SdIRiceviFile/RiceviFile" />
+			<wsdl:input>
+				<soapbind:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soapbind:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="SdIRiceviFile_service">
+		<wsdl:port name="SdIRiceviFile_port" binding="tns:SdIRiceviFile_binding">
+			<soapbind:address location="http://servizi.fatturapa.it/ricevi_file" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
