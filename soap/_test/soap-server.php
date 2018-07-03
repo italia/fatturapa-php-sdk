@@ -7,7 +7,8 @@ function login( $login, $password ){
 }
 
 function doFilter( $params ){
-  return "some string";
+    $test = strtoupper($params);
+    return "$test";
 }
 
 $server = new SoapServer( "organization.wsdl" );
