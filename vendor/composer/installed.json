@@ -1,0 +1,54 @@
+[
+    {
+        "name": "econea/nusoap",
+        "version": "v0.9.6",
+        "version_normalized": "0.9.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/econea/nusoap.git",
+            "reference": "84ac83bc884c477e6614fe8cbe2bf8858b5f75ff"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/econea/nusoap/zipball/84ac83bc884c477e6614fe8cbe2bf8858b5f75ff",
+            "reference": "84ac83bc884c477e6614fe8cbe2bf8858b5f75ff",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4"
+        },
+        "require-dev": {
+            "jakub-onderka/php-parallel-lint": "~1.0.0"
+        },
+        "time": "2018-04-19T05:28:20+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-0.9.x": "0.9.7.x-dev",
+                "dev-develop": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.0-only"
+        ],
+        "authors": [
+            {
+                "name": "Milan Felix Šulc",
+                "homepage": "https://f3l1x.io"
+            }
+        ],
+        "description": "NuSOAP fixed for PHP 5.4 - 7.1",
+        "homepage": "https://github.com/econea/nusoap",
+        "keywords": [
+            "nusoap",
+            "soap"
+        ]
+    }
+]
