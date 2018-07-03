@@ -9,3 +9,7 @@ Sostanzialmente si basa sulla SOAP extension di PHP sia come client che come ser
 ## Configurazione
 
 Modificare il file soap/config.php con i propri parametri
+
+## Accredito del canale
+
+Si ricorda che una volta installato e configurato il server SOAP è necessario accreditare il canale http://sdi.fatturapa.gov.it/SdI2FatturaPAWeb/AccediAlServizioAction.do?pagina=accreditamento_canale
