@@ -44,15 +44,36 @@ function read($filename, $target_dir) {
     //FatturaElettronicaHeader - DatiTrasmissione
     global $DatiTrasmissioneIdPaese; 
     global $DatiTrasmissioneIdCodice;
+    global $ProgressivoInvio;
+    global $FormatoTrasmissione;
+    global $CodiceDestinatario;
+
     $DatiTrasmissioneIdPaese = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdPaese;
     $DatiTrasmissioneIdCodice = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdCodice;
+    $ProgressivoInvio = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->ProgressivoInvio;
+    $FormatoTrasmissione =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->FormatoTrasmissione;
+    $CodiceDestinatario =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->CodiceDestinatario;
 
     //FatturaElettronicaHeader - CedentePrestatore
     global $CedentePrestatoreIdPaese; 
     global $CedentePrestatoreIdCodice;
+    global $Denominazione;
+    global $RegimeFiscale;
+    global $CedentePrestatoreIndirizzo;
+    global $CedentePrestatoreCap;
+    global $CedentePrestatoreComune;
+    global $CedentePrestatoreProvincia;
+    global $CedentePrestatoreNazione;
+
     $CedentePrestatoreIdPaese = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdPaese;
     $CedentePrestatoreIdCodice = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdCodice;
-    
+    $Denominazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->Anagrafica[0]->Denominazione;
+    $RegimeFiscale = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->RegimeFiscale;
+    $CedentePrestatoreIndirizzo = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Indirizzo;
+    $CedentePrestatoreCap = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->CAP;
+    $CedentePrestatoreComune = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Comune;
+    $CedentePrestatoreProvincia = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Provincia;
+    $CedentePrestatoreNazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Nazione;
 }
 
 if($DatiTrasmissioneIdPaese != ""): ?>
@@ -83,6 +104,8 @@ if($DatiTrasmissioneIdPaese != ""): ?>
                                 <b>Dati Trasmissione</b><br>
                                 Id Paese: <?php echo $DatiTrasmissioneIdPaese; ?><br>
                                 Id Codice: <?php echo $DatiTrasmissioneIdCodice; ?><br>
+                                Progressivo Invio: <?php echo $ProgressivoInvio; ?><br>
+                                Codice Destinatario: <?php echo $CodiceDestinatario; ?><br>
                             </td>
                         </tr>
                     </table>
@@ -97,12 +120,16 @@ if($DatiTrasmissioneIdPaese != ""): ?>
                                 <b>Cedente Prestatore</b><br>
                                 Id Paese: <?php echo $CedentePrestatoreIdPaese; ?><br>
                                 Id Codice: <?php echo $CedentePrestatoreIdCodice; ?><br>
+                                Denominazione: <?php echo $Denominazione; ?><br>
+                                Regime Fiscale: <?php echo $RegimeFiscale; ?><br>
                             </td>
                             
                             <td>
-                                Acme Corp.<br>
-                                John Doe<br>
-                                john@example.com
+                                Indirizzo: <?php echo $CedentePrestatoreIndirizzo; ?><br>
+                                CAP: <?php echo $CedentePrestatoreCap; ?><br>
+                                Comune: <?php echo $CedentePrestatoreComune; ?><br>
+                                Provincia: <?php echo $CedentePrestatoreProvincia; ?><br>
+                                Nazione: <?php echo $CedentePrestatoreNazione; ?><br>
                             </td>
                         </tr>
                     </table>
@@ -176,8 +203,14 @@ if($DatiTrasmissioneIdPaese != ""): ?>
                    Total: $385.00
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <small>Fattura generata dal file <?php echo(basename( $_FILES["fileToUpload"]["name"])); ?><small>
+                </td>
+            </tr>            
         </table>
-        <p>Fattura generata dal file <?php echo(basename( $_FILES["fileToUpload"]["name"])); ?></p>
+        
+        <p></p>
 
     </div>
 </body>
