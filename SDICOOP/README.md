@@ -1,6 +1,6 @@
-# fatturapa-php-sdk
+# SDICOOP php sdk
 
-fatturapa-php-sdk consente di interagire con i web services del Sistema di Interscambio (SdI) per la trasmissione allo stesso delle fatture in formato elettronico
+il presente pacchetto consente di interagire con i web services del Sistema di Interscambio (SdI) per la trasmissione e la ricezione delle fatture in formato elettronico
 
 La documentazione tecnica dell'SdI è disponibile al seguente url http://www.fatturapa.gov.it/export/fatturazione/it/normativa/f-3.htm
 
