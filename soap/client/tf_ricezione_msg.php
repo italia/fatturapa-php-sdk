@@ -17,6 +17,7 @@ echo "<h1>Test ricezione msg da SDI in seguito ad invio fattura</h1>";
 	echo "<hr />";
 	echo "<h2>Ricevuta consegna</h2>";
 	$response = $client->ricevutaConsegna();
+	var_dump($response);
 	print_r(print_output($response));
 
 	echo "<hr />";

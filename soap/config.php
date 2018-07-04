@@ -1,7 +1,9 @@
 <?php
 
+require_once(__DIR__."/vendor/autoload.php");
+
 //server trasmittente
-$st 	= "https://teamdigitale1.simevo.com/enrico/soap/server/";
+$st 	= "https://teamdigitale1.simevo.com/marco/soap/server/";
 
 //wsdl trasmissione fatture
 $tfwsdl = "TrasmissioneFatture_v1.1.wsdl";

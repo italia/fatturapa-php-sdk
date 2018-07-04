@@ -9,16 +9,14 @@ include("../config.php");
 *	E' possibile simulare le chiamate a questi end point dal file /client/tf_ricezione_fatture.php
 */
 
-function riceviFatture() {
-  
-	//parse request
-
+function riceviFatture()
+{    
+	return "ciao";
 }
 
-function notificaDecorrenzaTermini() {
-  
-	//parse request
-
+function notificaDecorrenzaTermini()
+{
+    return "test";
 }
 
 
