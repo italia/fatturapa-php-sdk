@@ -1,15 +1,18 @@
 # fatturapa-php-sdk
 
-fatturapa-php-sdk consente di interagire con i web services del Sistema di Interscambio (SdI) per la trasmissione allo stesso delle fatture in formato elettronico
+fatturapa-php-sdk consente di interagire con il Sistema di Interscambio (SdI) per la trasmissione e la ricezione delle fatture in formato elettronico in base alle modalità di comunicazione rese disponibili
 
-La documentazione tecnica dell'SdI è disponibile al seguente url http://www.fatturapa.gov.it/export/fatturazione/it/normativa/f-3.htm
+# SDICOOP
 
-Sostanzialmente si basa sulla SOAP extension di PHP sia come client che come server.
+consente di interagire attraverso i web services SOAP. 
+La documentazione ufficiale è presente al seguente url http://www.fatturapa.gov.it/export/fatturazione/it/normativa/f-3.htm, mentre per le specifiche del pacchetto PHP si rimanda al rispettivo README.
 
-## Configurazione
+# SDIFTP
 
-Modificare il file soap/config.php con i propri parametri
+consente di interagire tramite la trasmissione via FPT. 
+La documentazione ufficiale è presente al seguente url http://www.fatturapa.gov.it/export/fatturazione/it/normativa/f-3.htm, mentre per le specifiche del pacchetto PHP si rimanda al rispettivo README.
 
-## Accredito del canale
+# utils
 
-Si ricorda che una volta installato e configurato il server SOAP è necessario accreditare il canale http://sdi.fatturapa.gov.it/SdI2FatturaPAWeb/AccediAlServizioAction.do?pagina=accreditamento_canale
+contiene una serie di utilities in PHP che possono essere utilizzate all'interno delle proprie web app
+

@@ -12,7 +12,10 @@ include("../config.php");
 
 function ricevutaConsegna() {
   
-	//parse request
+	return new SoapVar(
+            array(
+                'Element1' => "Some value",
+                'Element2' => "Some other value"), SOAP_ENC_OBJECT );
 
 }
 
