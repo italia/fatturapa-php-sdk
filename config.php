@@ -2,14 +2,15 @@
 
 ini_set( "soap.wsdl_cache_enabled", 0 );
 ini_set( 'soap.wsdl_cache_ttl', 0 );
-// carica classi composer
+
+// carica classi da composer
 require_once(__DIR__."/vendor/autoload.php");
 require_once(__DIR__."/soap/soap_handler.php");
 
-define("ENDPOINT","https://teamdigitale1.simevo.com/");
+define("ENDPOINT","https://teamdigitale1.simevo.com/test/");
 
 //server trasmittente
-$st     = "https://teamdigitale1.simevo.com/marco/soap/server/";
+$st     = "https://teamdigitale1.simevo.com/test/marco/soap/server/";
 
 //wsdl trasmissione fatture
 $tfwsdl = "TrasmissioneFatture_v1.1.wsdl";
