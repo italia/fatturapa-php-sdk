@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8">
+    <title>Editor semplice per fattura elettronica</title>
+    <script src="js/jsoneditor.min.js"></script>
+    <script src="js/handlebars.min.js"></script>
+    <style>
+    pre { background-color: gray; width: 100%; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+    <h1>Editor per fattura elettronica basato sullo schema JSON</h1>
+    <p>
+      Codice sorgente: <a href="https://github.com/simevo/fattura-elettronica-json">https://github.com/simevo/fattura-elettronica-json</a>
+    </p>
+    <div>
+      <button id='carica_json'>Carica una fattura di esempio in formato JSON</button>
+    </div>
+    <hr/>
+    <div>
+      <form enctype="multipart/form-data" method="post" id="xml_fileinfo">
+        <label>File fattura in formato XML:</label>
+        <input type="file" name="xml" required id="xml"/>
+      </form>
+      <button id='carica_xml'>Carica fattura XML</button>
+    </div>
+    <hr/>
+    <div>
+      <button id='genera'>Genera e visualizza la fattura in formato XML</button>
+    </div>
+    <hr/>
+    <button id='resetta'>Resetta il form</button>
+    <pre id="xml_result"></pre>
+    <hr/>
+    <div id='editor_holder'></div>
+    <script type="text/javascript">
+      // configuration for jshint
+      /* jshint browser: true, devel: true */
+      /* global JSONEditor, Handlebars */
+      "use strict";
+      // Initialize the editor with a JSON schema
+      var editor = new JSONEditor(document.getElementById('editor_holder'), {
+        // Enable fetching schemas via ajax
+        ajax: true,
+        // The schema for the editor
+        schema: {
+          $ref: "fatturaPA_1.2_schema.json"
+        },
+      });
+      document.getElementById("genera").onclick = function() {
+        var request = new XMLHttpRequest();
+        request.open("GET", "fatturaPA_1.2.hbs");
+        request.onload = function() {
+          if (request.status == 200) {
+            if (request.responseText) {
+              var source = request.responseText;
+              var template = Handlebars.compile(source);
+              var context = editor.getValue();
+              var xml = template(context);
+              document.getElementById("xml_result").innerText = xml;
+            }
+          }
+        };
+        request.send();
+      };
+      document.getElementById("carica_json").onclick = function() {
+        var request = new XMLHttpRequest();
+        request.open("GET", "IT01234567890_FPA01-js.json");
+        request.onload = function() {
+          if (request.status == 200) {
+            if (request.responseText) {
+              var json = JSON.parse(request.responseText);
+              editor.setValue(json);
+            }
+          }
+        };
+        request.send();
+      };
+      document.getElementById("carica_xml").onclick = function() {
+        var request = new XMLHttpRequest();
+        request.open("POST", "xml2json.php");
+        var form = document.getElementById("xml_fileinfo");
+        var data_to = new FormData(form);
+        console.log(data_to);
+        request.onload = function() {
+          if (request.status == 200) {
+            if (request.responseText) {
+              var json = JSON.parse(request.responseText);
+              editor.setValue(json);
+            }
+          }
+        };
+        request.send(data_to);
+      };
+      document.getElementById("resetta").onclick = function() {
+        var context = editor.setValue({});
+        document.getElementById("xml_result").innerText = '';
+      };
+    </script>
+  </body>
+</html>

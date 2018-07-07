@@ -1,0 +1,1714 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2",
+  "title": "Fattura Elettronica v 1.2",
+  "description": "Schema JSON per la Fattura Elettronica Italiana",
+  "type": "object",
+  "definitions": {},
+  "properties": {
+    "FatturaElettronica": {
+      "title": "Fattura Elettronica Italiana",
+      "type": "object",
+      "properties": {
+        "versione": {
+           "type": "string",
+           "title": "Versione documento",
+           "description": "FPR12: Fattura tra Privati, FPA12: Fattura verso Pubblica Amministrazione",
+           "pattern": "^FP(A|R)12$",
+           "default": "FPA12"
+        },
+        "FatturaElettronicaHeader": {
+          "title": "Intestazione della Fattura Elettronica",
+          "type": "object",
+          "properties": {
+            "DatiTrasmissione": {
+              "title": "Dati per il recapito del documento elettronico",
+              "type": "object",
+              "properties": {
+                "IdTrasmittente": {
+                  "title": "Identificativo fiscale del soggetto trasmittente",
+                  "type": "object",
+                  "properties": {
+                    "IdPaese": {
+                      "type": "string",
+                      "title": "Codice della nazione assegnante l’identificativo fiscale al soggetto trasmittente",
+                      "description": "Espressa secondo lo standard ISO 3166-1 alpha-2 code (https://it.wikipedia.org/wiki/ISO_3166-1_alpha-2), es: Italia: IT, Francia: FR, Svizzera: CH, San Marino: SM, Città del Vaticano: VA, Austria: AT, Slovenia: SI",
+                      "pattern": "^[A-Z]{2}$",
+                      "default": "",
+                      "examples": [
+                        "IT"
+                      ]
+                    },
+                    "IdCodice": {
+                      "title": "Numero di identificazione fiscale del soggetto trasmittente (per i soggetti stabiliti nel territorio dello Stato Italiano corrisponde al Codice Fiscale; per i non residenti si fa riferimento all’identificativo fiscale assegnato dall’autorità del paese di residenza)",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 28,
+                      "default": "",
+                      "examples": [
+                        "01234567890"
+                      ]
+                    }
+                  },
+                  "required": ["IdPaese", "IdCodice"]
+                },
+                "ProgressivoInvio": {
+                  "title": "Progressivo che il soggetto trasmittente attribuisce al file che inoltra al Sistema di Interscambio per una propria finalità di identificazione univoca",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 10,
+                  "default": "",
+                  "examples": [
+                    "00001"
+                  ]
+                },
+                "FormatoTrasmissione": {
+                  "type": "string",
+                  "title": "Codice identificativo del tipo di trasmissione che si sta effettuando e del relativo formato",
+                  "pattern": "^FP(A|R)12$",
+                  "default": "",
+                  "examples": [
+                    "FPA12"
+                  ]
+                },
+                "CodiceDestinatario": {
+                  "type": "string",
+                  "title": "Identifica il soggetto al quale è destinata la fattura",
+                  "description": "Per PA: Codice Ufficio (6 caratteri, vedi https://www.indicepa.gov.it/). Per fatturazione verso privati, codice del canale di ricezione accreditato nel  Sistema di Interscambio (7 caratteri) oppure ‘0000000’ se riceve tramite PEC",
+                  "pattern": "^[A-Z0-9]{6,7}$",
+                  "default": "",
+                  "examples": [
+                    "AAAAAA"
+                  ]
+                }
+              },
+              "additionalProperties": {
+                "ContattiTrasmittente": {
+                  "Telefono": {
+                    "type": "string",
+                    "title": "Contatto telefonico fisso / mobile",
+                    "default": "",
+                    "minLength": 5,
+                    "maxLength": 12
+                  },
+                  "Email": {
+                    "type": "email",
+                    "title": "Indirizzo di posta elettronica",
+                    "default": ""
+                  }
+                },
+                "PECDestinatario": {
+                  "type": "email",
+                  "title": "indirizzo di Posta Elettronica Certificata al quale viene recapitata la fattura; viene valorizzato nei soli casi di destinatario diverso da Pubblica Amministrazione, qualora il destinatario utilizzi il canale PEC per ricevere le fatture.Può essere valorizzato solo se il valore di CodiceDestinatario è uguale a ‘0000000’",
+                  "default": ""
+                }
+              },
+              "required": ["IdTrasmittente", "ProgressivoInvio", "FormatoTrasmissione", "CodiceDestinatario"]
+            },
+            "CedentePrestatore": {
+              "type": "object",
+              "title": "Dati del Cedente / Prestatore del bene / servizio",
+              "properties": {
+                "DatiAnagrafici": {
+                  "type": "object",
+                  "title": "Dati anagrafici del cedente/prestatore",
+                  "properties": {
+                    "IdFiscaleIVA": {
+                      "title": "Dati identificativi ai fini IVA del soggetto cedente/prestatore",
+                      "description": "Partita IVA italiana per i soggetti residenti in Italia e per quelli esteri operanti in Italia (identificati attraverso una Stabile Organizzazione oppure mediante un rappresentante fiscale o ancora direttamente), oppure identificativo fiscale assegnato dall’autorità del proprio paese per i soggetti non residenti)",
+                      "type": "object",
+                      "properties": {
+                        "IdPaese": {
+                          "type": "string",
+                          "title": "Codice del paese assegnante l’identificativo fiscale al soggetto cedente/prestatore",
+                          "description": "Sigla della nazione espressa secondo lo standard ISO 3166-1 alpha-2 code (https://it.wikipedia.org/wiki/ISO_3166-1_alpha-2), es: Italia: IT, Francia: FR, Svizzera: CH, San Marino: SM, Città del Vaticano: VA, Austria: AT, Slovenia: SI",
+                          "pattern": "^[A-Z]{2}$",
+                          "default": "",
+                          "examples": [
+                            "IT"
+                          ]
+                        },
+                        "IdCodice": {
+                          "title": "Numero di identificazione fiscale del soggetto cedente/prestatore (per i soggetti stabiliti nel territorio dello Stato Italiano corrisponde al Codice Fiscale; per i non residenti si fa riferimento all’identificativo fiscale assegnato dall’autorità del paese di residenza)",
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 28,
+                          "default": "",
+                          "examples": [
+                            "01234567890"
+                          ]
+                        }
+                      },
+                      "required": ["IdPaese", "IdCodice"]
+                    },
+                    "Anagrafica": {
+                      "type": "object",
+                      "title": "Anagrafica",
+                      "description": "Il campo Denominazione è in alternativa ai campi Nome e Cognome",
+                      "properties": {
+                        "Denominazione": {
+                          "type": "string",
+                          "title": "Ditta, denominazione o ragione sociale del cedente/prestatore (compilare nei casi di persona non fisica)",
+                          "description": "Questo campo è in alternativa ai campi Nome e Cognome",
+                          "default": "",
+                          "minLength": 1,
+                          "maxLength": 80,
+                          "examples": [
+                            "ALPHA SRL"
+                          ]
+                        },
+                        "Nome": {
+                          "type": "string",
+                          "title": "Nome del cedente/prestatore (compilare nei casi di persona fisica)",
+                          "description": "Questo campo va compilato insieme al Cognome ed è in alternativa al campo Denominazione",
+                          "maxLength": 60
+                        },
+                        "Cognome": {
+                          "type": "string",
+                          "title": "Cognome del cedente/prestatore (compilare nei casi di persona fisica)",
+                          "description": "Questo campo va compilato insieme al Nome ed è in alternativa al campo Denominazione",
+                          "maxLength": 60
+                        }
+                      },
+                      "minProperties": 1,
+                      "additionalProperties": "false"
+                    },
+                    "RegimeFiscale": {
+                      "type": "string",
+                      "title": "Regime fiscale del cedente/prestatore",
+                      "description": "RF01: Regime ordinario; RF02: Regime dei contribuenti minimi; RF03: Regime delle nuove iniziative produttive; RF04: Agricoltura e attività connesse e pesca; RF05: Vendita sali e tabacchi; RF06: Commercio dei fiammiferi; RF07: Editoria; RF08: Gestione di servizi di telefonia pubblica; RF09: Rivendita di documenti di trasporto pubblico e di sosta; RF10: Intrattenimenti, giochi e altre attività; RF11: Agenzie di viaggi e turismo; RF12: Agriturismo; RF13: Vendite a domicilio; RF14: Rivendita di beni usati, di oggetti d'arte, d'antiquariato o da collezione; RF15: Agenzie di vendite all'asta di oggetti d'arte, antiquariato o da collezione; RF16: IVA per cassa P.A.; RF17: IVA per cassa; RF19: Regime forfettario; RF18: Altro",
+                      "pattern": "^RF[0-9]{2}$",
+                      "default": "",
+                      "examples": [
+                        "RF19"
+                      ]
+                    }
+                  },
+                  "additionalProperties": {
+                    "CodiceFiscale": {
+                      "type": "string",
+                      "pattern": "^[A-Z0-9]{11,16}$"
+                    },
+                    "AlboProfessionale": {
+                      "type": "string",
+                      "maxLength": "60"
+                    },
+                    "ProvinciaAlbo": {
+                      "type": "string",
+                      "title": "Sigla della provincia di iscrizione all'abo professionale",
+                      "default": "",
+                      "pattern": "^[A-Z]{2}$",
+                      "examples": [
+                        "SS"
+                      ]
+                    },
+                    "NumeroIscrizioneAlbo": {
+                      "type": "string",
+                      "maxLength": "60"
+                    },
+                    "DataIscrizioneAlbo": {
+                      "type": "string",
+                      "title": "Data di iscrizione all'albo professionale",
+                      "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                      "default": "",
+                      "examples": [
+                        "2017-01-18"
+                      ]
+                    }
+                  },
+                  "required": ["IdFiscaleIVA", "Anagrafica", "RegimeFiscale"]
+                },
+                "Sede": {
+                  "type": "object",
+                  "title": "Sede legale per le società e del domicilio fiscale per le ditte individuali e i lavoratori autonomi",
+                  "properties": {
+                    "Indirizzo": {
+                      "type": "string",
+                      "title": "Indirizzo del cedente/prestatore: via / piazza / ... nome e (opzionale) numero civico",
+                      "description": "Il numero civico può anche essere indicato separatamente nel campo apposito",
+                      "default": "",
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "examples": [
+                        "VIALE ROMA 543"
+                      ]
+                    },
+                    "CAP": {
+                      "type": "string",
+                      "title": "Codice di Avviamento Postale",
+                      "default": "",
+                      "pattern": "^[0-9]{5}$",
+                      "examples": [
+                        "07100"
+                      ]
+                    },
+                    "Comune": {
+                      "type": "string",
+                      "title": "Comune",
+                      "default": "",
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "examples": [
+                        "SASSARI"
+                      ]
+                    },
+                    "Nazione": {
+                      "type": "string",
+                      "title": "Codice della nazione",
+                      "description": "Espressa secondo lo standard ISO 3166-1 alpha-2 code (https://it.wikipedia.org/wiki/ISO_3166-1_alpha-2), es: Italia: IT, Francia: FR, Svizzera: CH, San Marino: SM, Città del Vaticano: VA, Austria: AT, Slovenia: SI",
+                      "pattern": "^[A-Z]{2}$",
+                      "default": "IT",
+                      "examples": [
+                        "IT"
+                      ]
+                    }
+                  },
+                  "additionalProperties": {
+                    "Provincia": {
+                      "type": "string",
+                      "title": "Sigla della provincia di appartenenza del comune (da compilare nei soli casi di sede in Italia)",
+                      "default": "",
+                      "pattern": "^[A-Z]{2}$",
+                      "examples": [
+                        "SS"
+                      ]
+                    },
+                    "NumeroCivico": {
+                      "type": "string",
+                      "title": "Numero civico (se non è già indicato nel campo Indirizzo)",
+                      "minLength": 1,
+                      "maxLength": 8
+                    }
+                  },
+                  "required": ["Indirizzo", "CAP", "Comune", "Nazione"]
+                }
+              },
+              "additionalProperties": {
+                "StabileOrganizzazione": {
+                  "type": "object",
+                  "title": "Compilare obbligatoriamente solo se il cedente/prestatore è un soggetto non residente ed effettua la transazione oggetto del documento tramite stabile organizzazione",
+                  "properties": {
+                    "Indirizzo": {
+                      "type": "string",
+                      "title": "Indirizzo  della stabile organizzazione del del cedente/prestatore: via / piazza / ... nome e (opzionale) numero civico",
+                      "description": "Il numero civico può anche essere indicato separatamente nel campo apposito",
+                      "default": "",
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "examples": [
+                        "VIALE ROMA 543"
+                      ]
+                    },
+                    "CAP": {
+                      "type": "string",
+                      "title": "Codice di Avviamento Postale",
+                      "default": "",
+                      "pattern": "^[0-9]{5}$",
+                      "examples": [
+                        "07100"
+                      ]
+                    },
+                    "Comune": {
+                      "type": "string",
+                      "title": "Comune",
+                      "default": "",
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "examples": [
+                        "SASSARI"
+                      ]
+                    },
+                    "Nazione": {
+                      "type": "string",
+                      "title": "Codice della nazione",
+                      "description": "Espressa secondo lo standard ISO 3166-1 alpha-2 code (https://it.wikipedia.org/wiki/ISO_3166-1_alpha-2), es: Italia: IT, Francia: FR, Svizzera: CH, San Marino: SM, Città del Vaticano: VA, Austria: AT, Slovenia: SI",
+                      "pattern": "^[A-Z]{2}$",
+                      "default": "IT",
+                      "examples": [
+                        "IT"
+                      ]
+                    }
+                  },
+                  "additionalProperties": {
+                    "Provincia": {
+                      "type": "string",
+                      "title": "Sigla della provincia di appartenenza del comune (da compilare nei soli casi di sede in Italia)",
+                      "default": "",
+                      "pattern": "^[A-Z]{2}$",
+                      "examples": [
+                        "SS"
+                      ]
+                    },
+                    "NumeroCivico": {
+                      "type": "string",
+                      "title": "Numero civico (se non è già indicato nel campo Indirizzo)",
+                      "minLength": 1,
+                      "maxLength": 8
+                    }
+                  },
+                  "required": ["Indirizzo", "CAP", "Comune", "Nazione"]
+                },
+                "IscrizioneREA": {
+                  "type": "object",
+                  "title": "Compilare obbligatoriamente solo per società soggette al vincolo dell’iscrizione nel registro delle imprese ai sensi dell’art. 2250 del codice civile",
+                  "properties": {
+                    "Ufficio": {
+                      "type": "string",
+                      "title": "Sigla della provincia ove ha sede l'Ufficio del Registro delle Imprese presso il quale è registrata la società",
+                      "default": "",
+                      "pattern": "^[A-Z]{2}$",
+                      "examples": [
+                        "SS"
+                      ]
+                    },
+                    "NumeroREA": {
+                      "type": "string",
+                      "title": "Numero di repertorio con il quale la società è iscritta nel Registro delle Imprese",
+                      "default": "",
+                      "maxLength": 20
+                    },
+                    "CapitaleSociale": {
+                      "type": "string",
+                      "title": "Capitale sociale effettivamente versato quale risulta esistente dall’ultimo bilancio della società",
+                      "description": "Questo campo va compilato nei soli casi di società di capitali (SpA, SApA, SRL)",
+                      "pattern": "^-?[0-9]{1,11}\\.[0-9]{2}$"
+                    },
+                    "SocioUnico": {
+                      "type": "string",
+                      "title": "Se la società si componge di un unico socio o di più soci",
+                      "description": "Questo elemento è valorizzato nei casi di società per azioni e a responsabilità limitata; SU: socio unico, SM: più soci",
+                      "pattern": "^(SU|SM)$"
+                    },
+                    "StatoLiquidazione": {
+                      "title": "Se la società si trova in stato di liquidazione oppure no",
+                      "description": "LS: in liquidazione, LN: non in liquidazione",
+                      "pattern": "^L(S|N)$"
+                    }
+                  }
+                },
+                "Contatti":{},
+                "RiferimentoAmministrazione": {
+                  "type": "string",
+                  "title": "Eventuale riferimento utile al destinatario per automatizzare la gestione amministrativa dell’operazione in fattura",
+                  "default": "",
+                  "maxLength": 20
+                }
+              },
+              "required": ["DatiAnagrafici", "Sede"]
+            },
+            "CessionarioCommittente": {
+              "type": "object",
+              "title": "Dati del Cessionario / Committente",
+              "properties": {
+                "DatiAnagrafici": {
+                  "type": "object",
+                  "title": "Dati anagrafici del cessionario/committente",
+                  "properties": {
+                    "Anagrafica": {
+                      "type": "object",
+                      "properties": {
+                        "Denominazione": {
+                          "type": "string",
+                          "title": "Ditta, denominazione o ragione sociale del cessionario/committente (compilare nei casi di persona non fisica)",
+                          "description": "Questo campo è in alternativa ai campi Nome e Cognome",
+                          "default": "",
+                          "minLength": 1,
+                          "maxLength": 80,
+                          "examples": [
+                            "AMMINISTRAZIONE BETA"
+                          ]
+                        },
+                        "Nome": {
+                          "type": "string",
+                          "title": "Nome del cessionario/committente (compilare nei casi di persona fisica)",
+                          "description": "Questo campo va compilato insieme al Cognome ed è in alternativa al campo Denominazione",
+                          "maxLength": 60
+                        },
+                        "Cognome": {
+                          "type": "string",
+                          "title": "Cognome del cessionario/committente (compilare nei casi di persona fisica)",
+                          "description": "Questo campo va compilato insieme al Nome ed è in alternativa al campo Denominazione",
+                          "maxLength": 60
+                        }
+                      },
+                      "minProperties": 1,
+                      "additionalProperties": "false"
+                    }
+                  },
+                  "additionalProperties": {
+                    "IdFiscaleIVA": {
+                      "title": "Dati identificativi ai fini IVA del cessionario/committente; compilare in alternativa non esclusiva a quella del Codice Fiscale (cioè può non essere compilato se è compilato il Codice Fiscale)",
+                      "description": "Partita IVA italiana per i soggetti residenti in Italia e per quelli esteri operanti in Italia (identificati attraverso una Stabile Organizzazione oppure mediante un rappresentante fiscale o ancora direttamente), oppure identificativo fiscale assegnato dall’autorità del proprio paese per i soggetti non residenti)",
+                      "type": "object",
+                      "properties": {
+                        "IdPaese": {
+                          "type": "string",
+                          "title": "Codice del paese assegnante l’identificativo fiscale al soggetto cessionario/committente",
+                          "description": "Sigla della nazione espressa secondo lo standard ISO 3166-1 alpha-2 code (https://it.wikipedia.org/wiki/ISO_3166-1_alpha-2), es: Italia: IT, Francia: FR, Svizzera: CH, San Marino: SM, Città del Vaticano: VA, Austria: AT, Slovenia: SI",
+                          "pattern": "^[A-Z]{2}$",
+                          "default": "",
+                          "examples": [
+                            "IT"
+                          ]
+                        },
+                        "IdCodice": {
+                          "title": "Numero di identificazione fiscale del soggetto cessionario/committente (per i soggetti stabiliti nel territorio dello Stato Italiano corrisponde al Codice Fiscale; per i non residenti si fa riferimento all’identificativo fiscale assegnato dall’autorità del paese di residenza)",
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 28,
+                          "default": "",
+                          "examples": [
+                            "01234567890"
+                          ]
+                        }
+                      },
+                      "required": ["IdPaese", "IdCodice"]
+                    },
+                    "CodiceFiscale": {
+                      "type": "string",
+                      "title": "Codice Fiscale del cessionario/committente; compilare in alternativa non esclusiva ai Dati identificativi ai fini IVA (può non essere compilato se sono presenti i Dati identificativi)",
+                      "default": "",
+                      "pattern": "^[A-Z0-9]{11,16}$",
+                      "examples": [
+                        "09876543210"
+                      ]
+                    }
+                  },
+                  "required": ["Anagrafica"]
+                },
+                "Sede": {
+                  "type": "object",
+                  "properties": {
+                    "Indirizzo": {
+                      "type": "string",
+                      "title": "Indirizzo del cessionario/committente: via / piazza / ... nome e (opzionale) numero civico",
+                      "description": "Il numero civico può anche essere indicato separatamente nel campo apposito",
+                      "default": "",
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "examples": [
+                        "VIA TORINO 38-B"
+                      ]
+                    },
+                    "CAP": {
+                      "type": "string",
+                      "title": "Codice di Avviamento Postale",
+                      "default": "",
+                      "pattern": "^[0-9]{5}$",
+                      "examples": [
+                        "00145"
+                      ]
+                    },
+                    "Comune": {
+                      "type": "string",
+                      "title": "Comune",
+                      "default": "",
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "examples": [
+                        "ROMA"
+                      ]
+                    },
+                    "Nazione": {
+                      "type": "string",
+                      "title": "Codice della nazione",
+                      "description": "Espresso secondo lo standard ISO 3166-1 alpha-2 code (https://it.wikipedia.org/wiki/ISO_3166-1_alpha-2), es: Italia: IT, Francia: FR, Svizzera: CH, ",
+                      "pattern": "^[A-Z]{2}$",
+                      "default": "",
+                      "examples": [
+                        "IT"
+                      ]
+                    }
+                  },
+                  "additionalProperties": {
+                    "Provincia": {
+                      "type": "string",
+                      "title": "Sigla della provincia di appartenenza del comune (da compilare nei soli casi di sede in Italia)",
+                      "default": "",
+                      "pattern": "^[A-Z]{2}$",
+                      "examples": [
+                        "RM"
+                      ]
+                    },
+                    "NumeroCivico": {
+                      "type": "string",
+                      "title": "Numero civico (se non è già indicato nel campo Indirizzo)",
+                      "minLength": 1,
+                      "maxLength": 8
+                    }
+                  },
+                  "required": ["Indirizzo", "CAP", "Comune", "Nazione"]
+                }
+              },
+              "additionalProperties": false,
+              "required": ["DatiAnagrafici", "Sede"]
+            }
+          },
+          "additionalProperties": {
+            "RappresentanteFiscale": {},
+            "TerzoIntermediarioOSoggettoEmittente": {},
+            "SoggettoEmittente": {}
+          },
+          "required": ["DatiTrasmissione", "CedentePrestatore", "CessionarioCommittente"]
+        },
+        "FatturaElettronicaBody": {
+          "type": "array",
+          "title": "Dati Generali e Contabili",
+          "minItems": 1,
+          "items": {
+            "title": "Corpo della Fattura Elettronica",
+            "type": "object",
+            "properties": {
+              "DatiGenerali": {
+                "type": "object",
+                "title": "Dati Generali",
+                "properties": {
+                  "DatiGeneraliDocumento": {
+                    "title": "Dati Generali del documento",
+                    "type": "object",
+                    "properties": {
+                      "TipoDocumento": {
+                        "type": "string",
+                        "title": "Tipologia del documento oggetto della trasmissione",
+                        "description": "TD01: Fattura, TD02: Acconto / anticipo su fattura, TD03: Acconto / anticipo su parcella, TD04: Nota di credito, TD05: Nota di debito, TD06: Parcella",
+                        "default": "",
+                        "pattern": "^TD[0-9]{2}$",
+                        "examples": [
+                          "TD01"
+                        ]
+                      },
+                      "Divisa": {
+                        "type": "string",
+                        "title": "Valuta utilizzata per l'indicazione degli importi",
+                        "description": "Espresso secondo lo standard ISO 4217 alpha-3:2001 (https://it.wikipedia.org/wiki/ISO_4217#Codici_attivi), esempi: EUR, USD, CHF, GBP, CZK ...",
+                        "default": "",
+                        "pattern": "^[A-Z]{3}$",
+                        "examples": [
+                          "EUR"
+                        ]
+                      },
+                      "Data": {
+                        "type": "string",
+                        "title": "Data del documento",
+                        "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                        "default": "",
+                        "examples": [
+                          "2017-01-18"
+                        ]
+                      },
+                      "Numero": {
+                        "type": "string",
+                        "title": "Numero progressivo attribuito dal cedente/prestatore al documento",
+                        "minLength": 1,
+                        "maxLength": 20,
+                        "default": "",
+                        "examples": [
+                          "123"
+                        ]
+                      }
+                    },
+                    "additionalProperties": {
+                      "Causale": {
+                        "type": "array",
+                        "title": "Descrizione della causale del documento",
+                        "items": {
+                          "type": "string",
+                          "title": "Causale",
+                          "default": "",
+                          "minLength": 1,
+                          "maxLength": 200,
+                          "examples": [
+                            "LA FATTURA FA RIFERIMENTO AD UNA OPERAZIONE AAAA BBBBBBBBBBBBBBBBBB CCC DDDDDDDDDDDDDDD E FFFFFFFFFFFFFFFFFFFF GGGGGGGGGG HHHHHHH II LLLLLLLLLLLLLLLLL MMM NNNNN OO PPPPPPPPPPP QQQQ RRRR SSSSSSSSSSSSSS",
+                            "SEGUE DESCRIZIONE CAUSALE NEL CASO IN CUI NON SIANO STATI SUFFICIENTI 200 CARATTERI AAAAAAAAAAA BBBBBBBBBBBBBBBBB"
+                          ]
+                        }
+                      },
+                      "DatiCassaPrevidenziale": {
+                        "type": "array",
+                        "title": "Dati cassa previdenziale",
+                        "items": {
+                          "type": "object",
+                          "title": "Cassa previdenziale",
+                          "properties": {
+                            "TipoCassa": {
+                              "type": "string",
+                              "title": "Cassa di previdenza della categoria professionale di appartenenza",
+                              "description": "TC01: Cassa Nazionale Previdenza e Assistenza Avvocati e Procuratori Legali, TC02: Cassa Previdenza Dottori Commercialisti, TC03: Cassa Previdenza e Assistenza Geometri, TC04: Cassa Nazionale Previdenza e Assistenza Ingegneri e Architetti Liberi Professionisti, TC05: Cassa Nazionale del Notariato, TC06: Cassa Nazionale Previdenza e Assistenza Ragionieri e Periti Commerciali, TC07: Ente Nazionale Assistenza Agenti e Rappresentanti di Commercio (ENASARCO), TC08: Ente Nazionale Previdenza e Assistenza Consulenti del Lavoro (ENPACL), TC09: Ente Nazionale Previdenza e Assistenza Medici (ENPAM), TC10: Ente Nazionale Previdenza e Assistenza Farmacisti (ENPAF), TC11: Ente Nazionale Previdenza e Assistenza Veterinari (ENPAV), TC12: Ente Nazionale Previdenza e Assistenza Impiegati dell'Agricoltura (ENPAIA), TC13: Fondo Previdenza Impiegati Imprese di Spedizione e Agenzie Marittime, TC14: Istituto Nazionale Previdenza Giornalisti Italiani (INPGI), TC15: Opera Nazionale Assistenza Orfani Sanitari Italiani (ONAOSI), TC16: Cassa Autonoma Assistenza Integrativa Giornalisti Italiani (CASAGIT), TC17: Ente Previdenza Periti Industriali e Periti Industriali Laureati (EPPI), TC18: Ente Previdenza e Assistenza Pluricategoriale (EPAP), TC19: Ente Nazionale Previdenza e Assistenza Biologi (ENPAB), TC20: Ente Nazionale Previdenza e Assistenza Professione Infermieristica (ENPAPI), TC21: Ente Nazionale Previdenza e Assistenza Psicologi (ENPAP), TC22: INPS",
+                              "pattern": "TC[0-9]{2}"
+                            },
+                            "AlCassa": {
+                              "type": "string",
+                              "title": "Aliquota contributiva prevista per la cassa di previdenza",
+                              "description": "Espressa in percentuale con due decimali separati dall'intero con il carattere '.' (punto)",
+                              "pattern": "^[0-9]{1,3}\\.[0-9]{2}$",
+                              "default": "",
+                              "examples": [
+                                "22.00"
+                              ]
+                            },
+                            "ImportoContributoCassa": {
+                              "type": "string",
+                              "title": "Importo del contributo relativo alla cassa di previdenza della categoria professionale",
+                              "pattern": "-?[0-9]{1,11}\\.[0-9]{2}$"
+                            },
+                            "AliquotaIVA": {
+                              "type": "string",
+                              "title": "Aliquota IVA applicata al contributo cassa previdenziale; nel caso di non applicabilità, il campo deve essere impostato a 0.00",
+                              "description": "Espressa in percentuale con due decimali separati dall'intero con il carattere '.' (punto)",
+                              "pattern": "^[0-9]{1,2}\\.[0-9]{2}$",
+                              "default": "",
+                              "examples": [
+                                "22.00"
+                              ]
+                            }
+                          },
+                          "additionalProperties": {
+                            "ImponibileCassa": {
+                              "type": "string",
+                              "title": "Importo totale del volume di affari sul quale occorre applicare il contributo di cassa previdenziale",
+                              "pattern": "-?[0-9]{1,11}\\.[0-9]{2}$"
+                            },
+                            "Ritenuta": {
+                              "type": "string",
+                              "title": "Indica se il contributo cassa è soggetto a ritenuta",
+                              "description": "RT01: Ritenuta di acconto persone fisiche, RT02: Ritenuta di acconto persone giuridiche",
+                              "pattern": "^RT[0-9]{2}$"
+
+                            },
+                            "Natura": {
+                              "type": "string",
+                              "title": "Codice che esprime la natura della non imponibilità del contributo cassa",
+                              "description": "N1: Escluse ex. art. 15, N2: Non soggette, N3: Non Imponibili, N4: Esenti, N5: Regime del margine, N6: Inversione contabile (reverse charge), N7: IVA assolta in altro stato UE",
+                              "pattern": "^N[0-9]{1}$",
+                              "default": "",
+                              "examples": [
+                                "N1"
+                              ]
+                            },
+                            "RiferimentoAmministrazione": {
+                              "type": "string",
+                              "title": "Eventuale riferimento utile al destinatario per automatizzare la gestione amministrativa dell’operazione in fattura",
+                              "default": "",
+                              "maxLength": 20
+                            }
+                          },
+                          "required": ["TipoCassa", "AlCassa", "ImportoContributoCassa", "AliquotaIVA"]
+                        }
+                      },
+                      "ScontoMaggiorazione": {
+                        "type": "array",
+                        "title": "Sconto o maggiorazione",
+                        "items": {}
+                      },
+                      "DatiRitenuta": {},
+                      "DatiBollo": {},
+                      "ImportoTotaleDocumento": {},
+                      "Arrotondamento": {},
+                      "Art73": {
+                        "type": "string",
+                        "title": "Indica se il documento è stato emesso secondo modalità e termini stabiliti con decreto ministeriale ai sensi dell'articolo 73 del DPR 633/72 (ciò consente al cedente/prestatore l'emissione nello stesso anno di più documenti aventi stesso numero)",
+                        "pattern": "^SI$"
+                      }
+                    },
+                    "required": ["TipoDocumento", "Divisa", "Data", "Numero"]
+                  }
+                },
+                "additionalProperties": {
+                  "DatiTrasporto": {
+                    "type": "object",
+                    "title": "Dati relativi al trasporto",
+                    "additionalProperties": {
+                      "DatiAnagraficiVettore": {
+                        "type": "object",
+                        "title": "Dati anagrafici del vettore",
+                        "properties": {
+                          "IdFiscaleIVA": {
+                            "title": "Dati identificativi ai fini IVA del soggetto vettore",
+                            "description": "Partita IVA italiana per i soggetti residenti in Italia e per quelli esteri operanti in Italia (identificati attraverso una Stabile Organizzazione oppure mediante un rappresentante fiscale o ancora direttamente), oppure identificativo fiscale assegnato dall’autorità del proprio paese per i soggetti non residenti)",
+                            "type": "object",
+                            "properties": {
+                              "IdPaese": {
+                                "type": "string",
+                                "title": "Codice del paese assegnante l’identificativo fiscale al soggetto vettore",
+                                "description": "Sigla della nazione espressa secondo lo standard ISO 3166-1 alpha-2 code (https://it.wikipedia.org/wiki/ISO_3166-1_alpha-2), es: Italia: IT, Francia: FR, Svizzera: CH, San Marino: SM, Città del Vaticano: VA, Austria: AT, Slovenia: SI",
+                                "pattern": "^[A-Z]{2}$",
+                                "default": "",
+                                "examples": [
+                                  "IT"
+                                ]
+                              },
+                              "IdCodice": {
+                                "title": "Numero di identificazione fiscale del soggetto vettore (per i soggetti stabiliti nel territorio dello Stato Italiano corrisponde al Codice Fiscale; per i non residenti si fa riferimento all’identificativo fiscale assegnato dall’autorità del paese di residenza)",
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 28,
+                                "default": "",
+                                "examples": [
+                                  "01234567890"
+                                ]
+                              }
+                            }
+                          },
+                          "Anagrafica": {
+                            "type": "object",
+                            "title": "Anagrafica",
+                            "description": "Il campo Denominazione è in alternativa ai campi Nome e Cognome",
+                            "properties": {
+                              "Denominazione": {
+                                "type": "string",
+                                "title": "Ditta, denominazione o ragione sociale del vettore (compilare nei casi di persona non fisica)",
+                                "description": "Questo campo è in alternativa ai campi Nome e Cognome",
+                                "default": "",
+                                "minLength": 1,
+                                "maxLength": 80,
+                                "examples": [
+                                  "ALPHA SRL"
+                                ]
+                              },
+                              "Nome": {
+                                "type": "string",
+                                "title": "Nome del vettore (compilare nei casi di persona fisica)",
+                                "description": "Questo campo va compilato insieme al Cognome ed è in alternativa al campo Denominazione",
+                                "maxLength": 60
+                              },
+                              "Cognome": {
+                                "type": "string",
+                                "title": "Cognome del vettore (compilare nei casi di persona fisica)",
+                                "description": "Questo campo va compilato insieme al Nome ed è in alternativa al campo Denominazione",
+                                "maxLength": 60
+                              }
+                            },
+                            "additionalProperties": "false"
+                          }
+                        },
+                        "additionalProperties": {
+                          "CodiceFiscale": {
+                            "type": "string",
+                            "title": "numero di codice fiscale del vettore",
+                            "pattern": "^[A-Z0-9]{11,16}$"
+                          },
+                          "NumeroLicenzaGuida": {
+                            "type": "string",
+                            "title": "Numero identificativo della licenza di guida (esempio: numero patente) del vettore",
+                            "maxLength": 20
+                          }
+                        },
+                        "required": ["IdFiscaleIVA", "Anagrafica"]
+                      },
+                      "MezzoTrasporto": {
+                        "type": "string",
+                        "maxLength": 80
+                      },
+                      "CausaleTrasporto": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "NumeroColli": {
+                        "type": "string",
+                        "pattern": "^[0-9]{1,4}$"
+                      },
+                      "Descrizione": {
+                        "type": "string",
+                        "maxLength": 100
+                      },
+                      "UnitaMisuraPeso": {
+                        "type": "string",
+                        "maxLength": 10
+                      },
+                      "PesoLordo": {
+                        "type": "string",
+                        "title": "Peso lordo",
+                        "pattern": "^[0-9]{1,4}\\.[0-9]{1,2}$"
+                      },
+                      "PesoNetto": {
+                        "type": "string",
+                        "title": "Peso netto",
+                        "pattern": "^[0-9]{1,4}\\.[0-9]{1,2}$"
+                      },
+                      "DataOraRitiro": {
+                        "type": "string",
+                        "title": "Data e ora di ritiro",
+                        "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DDThh:mm:ss",
+                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$",
+                        "default": "",
+                        "examples": [
+                          "2002-05-30T09:00:00"
+                        ]
+                      },
+                      "DataInizioTrasporto": {
+                        "type": "string",
+                        "title": "Data di inizio del trasporto",
+                        "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                        "default": "",
+                        "examples": [
+                          "2017-02-18"
+                        ]
+                      },
+                      "TipoResa": {
+                        "type": "string",
+                        "title": "Tipo di resa",
+                        "description": "Espresso secondo lo standard ICC-Camera di Commercio Internazionale (https://it.wikipedia.org/wiki/Incoterms#I_gruppi_dell%27Incoterms_2000): EXW: Ex Works, FCA: Free Carrier, FAS: Free Alongside Ship, FOB: Free On Board, CFR: Cost and Freight, CIF: Cost, Insurance and Freight, CPT: Carriage Paid To, CIP: Carriage and Insurance Paid to, DAF: Delivered At Frontier, DES: Delivered Ex Ship, DEQ: Delivered Ex Quay, DDU: Delivered Duty Unpaid, DDP: Delivered Duty Paid",
+                        "pattern": "^[A-Z]{3}$"
+                      },
+                      "IndirizzoResa": {
+                        "type": "object",
+                        "title": "Indirizzo di resa della merce",
+                        "properties": {
+                          "Indirizzo": {
+                            "type": "string",
+                            "title": "Indirizzo di resa: via / piazza / ... nome e (opzionale) numero civico",
+                            "description": "Il numero civico può anche essere indicato separatamente nel campo apposito",
+                            "default": "",
+                            "minLength": 1,
+                            "maxLength": 60,
+                            "examples": [
+                              "VIALE ROMA 543"
+                            ]
+                          },
+                          "CAP": {
+                            "type": "string",
+                            "title": "Codice di Avviamento Postale",
+                            "default": "",
+                            "pattern": "^[0-9]{5}$",
+                            "examples": [
+                              "07100"
+                            ]
+                          },
+                          "Comune": {
+                            "type": "string",
+                            "title": "Comune",
+                            "default": "",
+                            "minLength": 1,
+                            "maxLength": 60,
+                            "examples": [
+                              "SASSARI"
+                            ]
+                          },
+                          "Nazione": {
+                            "type": "string",
+                            "title": "Codice della nazione",
+                            "description": "Espressa secondo lo standard ISO 3166-1 alpha-2 code (https://it.wikipedia.org/wiki/ISO_3166-1_alpha-2), es: Italia: IT, Francia: FR, Svizzera: CH, San Marino: SM, Città del Vaticano: VA, Austria: AT, Slovenia: SI",
+                            "pattern": "^[A-Z]{2}$",
+                            "default": "IT",
+                            "examples": [
+                              "IT"
+                            ]
+                          }
+                        },
+                        "additionalProperties": {
+                          "Provincia": {
+                            "type": "string",
+                            "title": "Sigla della provincia di appartenenza del comune (da compilare nei soli casi di sede in Italia)",
+                            "default": "",
+                            "pattern": "^[A-Z]{2}$",
+                            "examples": [
+                              "SS"
+                            ]
+                          },
+                          "NumeroCivico": {
+                            "type": "string",
+                            "title": "Numero civico (se non è già indicato nel campo Indirizzo)",
+                            "minLength": 1,
+                            "maxLength": 8
+                          }
+                        }
+                      },
+                      "DataOraConsegna": {
+                        "type": "string",
+                        "title": "Data e ora di consegna",
+                        "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DDThh:mm:ss",
+                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$",
+                        "default": "",
+                        "examples": [
+                          "2002-05-30T09:00:00"
+                        ]
+                      }
+                    }
+                  },
+                  "FatturaPrincipale": {
+                    "type": "object",
+                    "title": "Dati della fattura principale",
+                    "description": "Presente nei casi di fatture per operazioni accessorie emesse dagli ‘autotrasportatori’ per usufruire delle agevolazioni in materia di registrazione e pagamento IVA",
+                    "properties": {
+                      "NumeroFatturaPrincipale": {
+                        "type": "string",
+                        "title": "Numero della fattura relativa al trasporto di beni, da indicare sulle fatture emesse dagli autotrasportatori per certificare le operazioni accessorie",
+                        "minLength": 1,
+                        "maxLength": 20
+                      },
+                      "DataFatturaPrincipale": {
+                        "type": "string",
+                        "title": "Data della fattura principale",
+                        "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DDThh:mm:ss",
+                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}$",
+                        "default": "",
+                        "examples": [
+                          "2002-05-30T09:00:00"
+                        ]
+                      }
+                    }
+                  },
+                  "DatiOrdineAcquisto": {
+                    "type": "array",
+                    "title": "Dati relativi all’ordine di acquisto dal quale scaturisce la cessione/prestazione oggetto del documento fattura",
+                    "items": {
+                      "type":"object",
+                      "properties": {
+                        "IdDocumento": {
+                          "type": "string",
+                          "title": "Identificativo dell'ordine di acquisto associato alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "RiferimentoNumeroLinea": {
+                          "type": "array",
+                          "title": "Numero identificativo della linea di dettaglio ",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[0-9]{1,4}$",
+                            "default": "",
+                            "examples": [
+                              1
+                            ]
+                          }
+                        },
+                        "Data": {
+                          "type": "string",
+                          "title": "Data dell'ordine di acquisto associato alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "2017-01-18"
+                          ]
+                        },
+                        "NumItem": {
+                          "type": "string",
+                          "title": "Identificativo della singola linea all'interno dell'ordine di acquisto associato alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "CodiceCommessaConvenzione": {
+                          "type": "string",
+                          "title": "Codice della commessa o della convenzione collegata alla fattura",
+                          "maxLength": 100
+                        },
+                        "CodiceCUP": {
+                          "type": "string",
+                          "title": "Codice CUP (Codice Unitario Progetto): codice gestito dal CIPE che caratterizza ogni progetto di investimento pubblico",
+                          "maxLength": 15
+                        },
+                        "CodiceCIG": {
+                          "type": "string",
+                          "title": ": Codice CIG (Codice Identificativo della Gara)",
+                          "maxLength": 20
+                        }
+                      },
+                      "required": ["IdDocumento"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "DatiContratto": {
+                    "type": "array",
+                    "title": "Dati relativi al contratto dal quale scaturisce la cessione/prestazione oggetto del documento fattura",
+                    "items": {
+                      "type":"object",
+                      "properties": {
+                        "IdDocumento": {
+                          "type": "string",
+                          "title": "Identificativo del contratto associato alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "RiferimentoNumeroLinea": {
+                          "type": "array",
+                          "title": "Numero identificativo della linea di dettaglio ",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[0-9]{1,4}$",
+                            "default": "",
+                            "examples": [
+                              1
+                            ]
+                          }
+                        },
+                        "Data": {
+                          "type": "string",
+                          "title": "Data del contratto associato alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "2017-01-18"
+                          ]
+                        },
+                        "NumItem": {
+                          "type": "string",
+                          "title": "Identificativo della singola linea all'interno del contratto associata alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "CodiceCommessaConvenzione": {
+                          "type": "string",
+                          "title": "Codice della commessa o della convenzione collegata alla fattura",
+                          "maxLength": 100
+                        },
+                        "CodiceCUP": {
+                          "type": "string",
+                          "title": "Codice CUP (Codice Unitario Progetto): codice gestito dal CIPE che caratterizza ogni progetto di investimento pubblico",
+                          "maxLength": 15
+                        },
+                        "CodiceCIG": {
+                          "type": "string",
+                          "title": ": Codice CIG (Codice Identificativo della Gara)",
+                          "maxLength": 20
+                        }
+                      },
+                      "required": ["IdDocumento"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "DatiConvenzione": {
+                    "type": "array",
+                    "title": "Dati relativi alla convenzione collegata alla fattura",
+                    "items": {
+                      "type":"object",
+                      "properties": {
+                        "IdDocumento": {
+                          "type": "string",
+                          "title": "Identificativo della convenzione associata alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "RiferimentoNumeroLinea": {
+                          "type": "array",
+                          "title": "Numero identificativo della linea di dettaglio ",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[0-9]{1,4}$",
+                            "default": "",
+                            "examples": [
+                              1
+                            ]
+                          }
+                        },
+                        "Data": {
+                          "type": "string",
+                          "title": "Data della convenzione associata alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "2017-01-18"
+                          ]
+                        },
+                        "NumItem": {
+                          "type": "string",
+                          "title": "Identificativo della singola linea all'interno della convenzione associata alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "CodiceCommessaConvenzione": {
+                          "type": "string",
+                          "title": "Codice della commessa o della convenzione collegata alla fattura",
+                          "maxLength": 100
+                        },
+                        "CodiceCUP": {
+                          "type": "string",
+                          "title": "Codice CUP (Codice Unitario Progetto): codice gestito dal CIPE che caratterizza ogni progetto di investimento pubblico",
+                          "maxLength": 15
+                        },
+                        "CodiceCIG": {
+                          "type": "string",
+                          "title": ": Codice CIG (Codice Identificativo della Gara)",
+                          "maxLength": 20
+                        }
+                      },
+                      "required": ["IdDocumento"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "DatiRicezione": {
+                    "type": "array",
+                    "title": "Dati relativi alla ricezione dei beni/servizi oggetto del documento fattura",
+                    "items": {
+                      "type":"object",
+                      "properties": {
+                        "IdDocumento": {
+                          "type": "string",
+                          "title": "Identificativo della ricezione associato alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "RiferimentoNumeroLinea": {
+                          "type": "array",
+                          "title": "Numero identificativo della linea di dettaglio ",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[0-9]{1,4}$",
+                            "default": "",
+                            "examples": [
+                              1
+                            ]
+                          }
+                        },
+                        "Data": {
+                          "type": "string",
+                          "title": "Data della ricezione associata alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "2017-01-18"
+                          ]
+                        },
+                        "NumItem": {
+                          "type": "string",
+                          "title": "Identificativo della singola linea all'interno della ricezione associata alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "CodiceCommessaConvenzione": {
+                          "type": "string",
+                          "title": "Codice della commessa o della convenzione collegata alla fattura",
+                          "maxLength": 100
+                        },
+                        "CodiceCUP": {
+                          "type": "string",
+                          "title": "Codice CUP (Codice Unitario Progetto): codice gestito dal CIPE che caratterizza ogni progetto di investimento pubblico",
+                          "maxLength": 15
+                        },
+                        "CodiceCIG": {
+                          "type": "string",
+                          "title": ": Codice CIG (Codice Identificativo della Gara)",
+                          "maxLength": 20
+                        }
+                      },
+                      "required": ["IdDocumento"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "DatiFattureCollegate": {
+                    "type": "array",
+                    "title": "Dati relativi alla fattura alla quale si collega il documento in oggetto",
+                    "items": {
+                      "type":"object",
+                      "properties": {
+                        "IdDocumento": {
+                          "type": "string",
+                          "title": "Identificativo della fattura associata alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "RiferimentoNumeroLinea": {
+                          "type": "array",
+                          "title": "Numero identificativo della linea di dettaglio ",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[0-9]{1,4}$",
+                            "default": "",
+                            "examples": [
+                              1
+                            ]
+                          }
+                        },
+                        "Data": {
+                          "type": "string",
+                          "title": "Data della fattura associata alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "2017-01-18"
+                          ]
+                        },
+                        "NumItem": {
+                          "type": "string",
+                          "title": "Identificativo della singola linea all'interno della fattura associata alla fattura o alla linea/linee di fattura indicate nell’elemento RiferimentoNumeroLinea",
+                          "maxLength": 20
+                        },
+                        "CodiceCommessaConvenzione": {
+                          "type": "string",
+                          "title": "Codice della commessa o della convenzione collegata alla fattura",
+                          "maxLength": 100
+                        },
+                        "CodiceCUP": {
+                          "type": "string",
+                          "title": "Codice CUP (Codice Unitario Progetto): codice gestito dal CIPE che caratterizza ogni progetto di investimento pubblico",
+                          "maxLength": 15
+                        },
+                        "CodiceCIG": {
+                          "type": "string",
+                          "title": ": Codice CIG (Codice Identificativo della Gara)",
+                          "maxLength": 20
+                        }
+                      },
+                      "required": ["IdDocumento"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "DatiSAL": {
+                    "type": "array",
+                    "title": "Dati relativi al SAL (Stato Avanzamento Lavori)",
+                    "items": {
+                      "type":"object",
+                      "properties": {
+                        "RiferimentoFase": {
+                          "type": "string",
+                          "pattern": "^[0-9]{1-3}$",
+                          "title": "Fase dello stato avanzamento cui la fattura si riferisce",
+                          "default": "",
+                          "examples": [
+                            1
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "DatiDDT": {
+                    "type": "array",
+                    "title": "Dati relativi al DDT (Documento di Trasporto",
+                    "description": "Compilare se è presente un documento di trasporto collegato alla fattura, e in caso di fatturazione differita",
+                    "items": {
+                      "type":"object",
+                      "properties": {
+                        "NumeroDDT": {
+                          "type": "string",
+                          "title": "Numero del Documento Di Trasporto",
+                          "maxLength": 20
+                        },
+                        "DataDDT": {
+                          "type": "string",
+                          "title": "Data del Documento Di Trasporto",
+                          "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "2017-01-18"
+                          ]
+                        },
+                        "RiferimentoNumeroLinea": {
+                          "type": "array",
+                          "title": "Numero della linea o delle linee di dettaglio della fattura alle quali si riferisce il DDT (così come identificato dagli elementi NumeroDDT e DataDDT)",
+                          "description": "nel caso in cui il documento di trasporto si riferisce all’intera fattura, questo elemento non deve essere valorizzato",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[0-9]{1,4}$",
+                            "default": "",
+                            "examples": [
+                              1
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": ["DatiGeneraliDocumento"]
+              },
+              "DatiBeniServizi": {
+                "type": "object",
+                "title": "Dati dei Beni / Servizi",
+                "properties": {
+                  "DettaglioLinee": {
+                    "type": "array",
+                    "title": "Linea di dettaglio del bene/servizio",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "NumeroLinea": {
+                          "type": "string",
+                          "pattern": "^[0-9]{1,4}$",
+                          "title": "Numero identificativo della linea di dettaglio ",
+                          "default": "",
+                          "examples": [
+                            1
+                          ]
+                        },
+                        "Descrizione": {
+                          "type": "string",
+                          "title": "Natura e qualità del bene/servizio oggetto della cessione/prestazione; può fare anche riferimento ad un precedente documento emesso a titolo di anticipo/acconto",
+                          "default": "",
+                          "minLength": 1,
+                          "maxLength": 1000,
+                          "examples": [
+                            "DESCRIZIONE DELLA FORNITURA"
+                          ]
+                        },
+                        "PrezzoUnitario": {
+                          "type": "string",
+                          "title": "Prezzo unitario del bene/servizio; nel caso di beni ceduti a titolo di sconto, premio o abbuono, l'importo indicato rappresenta il \"valore normale\"",
+                          "pattern": "^-?[0-9]{1,11}\\.[0-9]{2,8}$",
+                          "default": "",
+                          "examples": [
+                            "1.00"
+                          ]
+                        },
+                        "PrezzoTotale": {
+                          "type": "string",
+                          "title": "Importo totale del bene/servizio al netto dell'eventuale sconto",
+                          "pattern": "^-?[0-9]{1,11}\\.[0-9]{2,8}$",
+                          "default": "",
+                          "examples": [
+                            "5.00"
+                          ]
+                        },
+                        "AliquotaIVA": {
+                          "type": "string",
+                          "title": "Aliquota IVA applicata alla cessione/prestazione; nel caso di non applicabilità, il campo deve essere impostato a 0.00",
+                          "description": "Espressa in percentuale con due decimali separati dall'intero con il carattere '.' (punto)",
+                          "pattern": "^[0-9]{1,2}\\.[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "22.00"
+                          ]
+                        }
+                      },
+                      "additionalProperties": {
+                        "TipoCessionePrestazione": {
+                          "type": "string",
+                          "title": "Codice che identifica la tipologia di cessione/prestazione qualora si tratti di sconto, premio, abbuono o spesa accessoria; è quindi valorizzabile soltanto in presenza di questi casi",
+                          "description": "SC: Sconto, PR: Premio. AB: Abbuono, AC: Spesa accessoria",
+                          "pattern": "^SC|PR|AB|AC$"
+                        },
+                        "Quantita": {
+                          "type": "string",
+                          "title": "Numero di unità cedute/prestate; può non essere valorizzato nei casi in cui la prestazione non sia quantificabile",
+                          "default": "",
+                          "pattern": "^[0-9]{1,12}\\.[0-9]{2,8}$",
+                          "examples": [
+                            "5.00"
+                          ]
+                        },
+                        "UnitaMisura": {
+                          "type": "string",
+                          "title": "Unità di misura in cui è espresso il campo Quantità",
+                          "default": "",
+                          "maxLength": 10
+                        },
+                        "DataInizioPeriodo": {
+                          "type": "string",
+                          "title": "Data iniziale del periodo di riferimento cui si riferisce l'eventuale servizio prestato",
+                          "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "2017-01-18"
+                          ]
+                        },
+                        "DataFinePeriodo": {
+                          "type": "string",
+                          "title": "Data finale del periodo di riferimento cui si riferisce l'eventuale servizio prestato",
+                          "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "2017-01-18"
+                          ]
+                        },
+                        "Ritenuta": {
+                          "type": "string",
+                          "title": "Indica se la linea della fattura si riferisce ad una cessione/prestazione soggetta a ritenuta",
+                          "default": "SI",
+                          "pattern": "^SI$"
+                        },
+                        "Natura": {
+                          "type": "string",
+                          "title": "Codice che esprime la natura delle operazioni che non rientrano tra quelle imponibili o nei casi di inversione contabile",
+                          "description": "N1: Escluse ex. art. 15, N2: Non soggette, N3: Non Imponibili, N4: Esenti, N5: Regime del margine, N6: Inversione contabile (reverse charge), N7: IVA assolta in altro stato UE",
+                          "pattern": "^N[0-9]{1}$",
+                          "default": "",
+                          "examples": [
+                            "N1"
+                          ]
+                        },
+                        "RiferimentoAmministrazione": {
+                          "type": "string",
+                          "title": "Eventuale riferimento utile al destinatario per automatizzare la gestione amministrativa dell’operazione in fattura (capitolo di spesa, conto economico ...)",
+                          "default": "",
+                          "maxLength": 20
+                        },
+                        "CodiceArticolo": {
+                          "type": "array",
+                          "title": "Codici Articoli",
+                          "items": {
+                            "type": "object",
+                            "title": "Codice Articolo",
+                            "properties": {
+                              "CodiceTipo": {
+                                "type": "string",
+                                "title": "Indica la tipologia di codice articolo (i.e.: TARIC, CPV, EAN, SSC, ...)",
+                                "default": "",
+                                "minLength": 1,
+                                "maxLength": 35
+                              },
+                              "CodiceValore": {
+                                "type": "string",
+                                "title": "Valore del codice articolo corrispondente alla tipologia ",
+                                "default": "",
+                                "minLength": 1,
+                                "maxLength": 35
+                              }
+                            }
+                          }
+                        },
+                        "AltriDatiGestionali": {
+                          "type": "array",
+                          "title": "Altri dati gestionali",
+                          "items": {
+                            "type": "object",
+                            "title": "Dato gestionale",
+                            "properties": {
+                              "TipoDato": {
+                                "type": "string",
+                                "title": "Codice che identifica la tipologia di informazione",
+                                "default": "",
+                                "minLength": 1,
+                                "maxLength": 10
+                              },
+                              "RiferimentoTesto": {
+                                "type": "string",
+                                "title": "Calore alfanumerico riferito alla tipologia di informazione",
+                                "default": "",
+                                "minLength": 1,
+                                "maxLength": 60
+                              },
+                              "RiferimentoNumero": {
+                                "type": "string",
+                                "title": "valore numerico riferito alla tipologia di informazione",
+                                "pattern": "-?[0-9]{1,11}\\.[0-9]{2,8}"
+                              },
+                              "RiferimentoData": {
+                                "type": "string",
+                                "title": "data riferita alla tipologia di informazione",
+                                "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                                "default": "",
+                                "examples": [
+                                  "2017-01-18"
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "ScontoMaggiorazione": {
+                          "type": "array",
+                          "title": "Sconti e maggiorazioni",
+                          "items": {
+                            "type": "object",
+                            "title": "Sconto / maggiorazione",
+                            "properties": {
+                              "Tipo": {
+                                "type": "string",
+                                "title": "Indica se si tratta di sconto o di maggiorazione",
+                                "description": "SC: sconto. MG: maggiorazione",
+                                "pattern": "^SC|MG$"
+                              }
+                            },
+                            "additionalProperties": {
+                              "Percentuale": {
+                                "type": "string",
+                                "title": "Percentuale di sconto o di maggiorazione",
+                                "description": "Espressa in percentuale con due decimali separati dall'intero con il carattere '.' (punto)",
+                                "pattern": "^[0-9]{1,3}\\.[0-9]{2}$",
+                                "default": "",
+                                "examples": [
+                                  "10.00"
+                                ]
+                              },
+                              "Importo": {
+                                "type": "string",
+                                "title": "Importo dello sconto o della maggiorazione",
+                                "pattern": "-?[0-9]{1,11}\\.[0-9]{2}"
+                              }
+                            },
+                            "required": ["Tipo"]
+                          }
+                        }
+                      },
+                      "required": ["NumeroLinea", "Descrizione", "PrezzoUnitario", "PrezzoTotale", "AliquotaIVA"]
+                    }
+                  },
+                  "DatiRiepilogo": {
+                    "type": "array",
+                    "title": "Dati di riepilogo",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "title": "Dati di riepilogo per aliquota",
+                      "description": "Da valorizzare per ogni aliquota IVA e modalità di versamento dell’imposta (scissione dei pagamenti od ordinaria), e/o per ogni natura)",
+                      "properties": {
+                        "AliquotaIVA": {
+                          "type": "string",
+                          "title": "Aliquota IVA applicata alla cessione/prestazione; nel caso di non applicabilità, il campo deve essere impostato a 0.00",
+                          "description": "Espressa in percentuale con due decimali separati dall'intero con il carattere '.' (punto)",
+                          "pattern": "^[0-9]{1,2}\\.[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "22.00"
+                          ]
+                        },
+                        "ImponibileImporto": {
+                          "type": "string",
+                          "title": "Valore che rappresenta la base imponibile per le operazioni soggette ad IVA, oppure l’importo per le operazioni che non rientrano tra quelle 'imponibili'",
+                          "pattern": "^-?[0-9]{1,11}\\.[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "5.00"
+                          ]
+                        },
+                        "Imposta": {
+                          "type": "string",
+                          "title": "Imposta corrispondente all’applicazione dell’aliquota IVA sulla base imponibile",
+                          "pattern": "^-?[0-9]{1,11}\\.[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "1.10"
+                          ]
+                        }
+                      },
+                      "additionalProperties": {
+                        "Natura": {
+                          "type": "string",
+                          "title": "Codice che esprime la natura delle operazioni che non rientrano tra quelle imponibili",
+                          "description": "N1: Escluse ex. art. 15, N2: Non soggette, N3: Non Imponibili, N4: Esenti, N5: Regime del margine, N6: Inversione contabile (reverse charge), N7: IVA assolta in altro stato UE",
+                          "pattern": "^N[0-9]{1}$",
+                          "default": "",
+                          "examples": [
+                            "N1"
+                          ]
+                        },
+                        "SpeseAccessorie": {
+                          "type": "string",
+                          "title": "Corrispettivi relativi alle cessioni accessorie, (ad esempio imballaggi etc.) qualora presenti",
+                          "pattern": "-?[0-9]{1,11}\\.[0-9]{2}"
+                        },
+                        "Arrotondamento": {
+                          "type": "string",
+                          "title": "Arrotondamento sull'imponibile o sull’importo, qualora presente",
+                          "pattern": "-?[0-9]{1,11}\\.[0-9]{2,8}"
+                        },
+                        "EsigibilitaIVA": {
+                          "type": "string",
+                          "title": "Codice che esprime il regime di esigibilità dell’IVA (differita o immediata) o la modalità di versamento dell’imposta (scissione dei pagamenti)",
+                          "description": "D: esigibilità differita, I: esigibilità immediata, S: scissione dei pagamenti",
+                          "pattern": "^D|I|S$",
+                          "default": "",
+                          "examples": [
+                            "I"
+                          ]
+                        },
+                        "RiferimentoNormativo": {
+                          "type": "string",
+                          "title": "Normativa di riferimento (campo obbligatorio nei casi di operazioni di cui all’elemento Natura)",
+                          "minLength": 1,
+                          "maxLength": 100
+                        }
+                      },
+                      "required": ["AliquotaIVA", "ImponibileImporto", "Imposta"]
+                    }
+                  }
+                },
+                "required": ["DettaglioLinee", "DatiRiepilogo"]
+              }
+            },
+            "additionalProperties": {
+              "Allegati": {
+                "type": "array",
+                "title": "Allegati",
+                "items": {
+                  "type": "object",
+                  "title": "Allegato",
+                  "properties": {
+                    "NomeAttachment": {
+                      "type": "string",
+                      "title": "Contiene il nome del documento allegato alla fattura elettronica",
+                      "maxLength": 60
+                    },
+                    "Attachment": {
+                      "type": "string",
+                      "title": "Contiene il documento allegato alla fattura elettronica"
+                    }
+                  },
+                  "additionalProperties": {
+                    "AlgoritmoCompressione": {
+                      "type": "string",
+                      "title": "Algoritmo utilizzato per comprimere l’allegato",
+                      "maxLength": 10
+                    },
+                    "FormatoAttachment": {
+                      "type": "string",
+                      "title": "Formato dell’allegato",
+                      "maxLength": 10
+                    },
+                    "DescrizioneAttachment": {
+                      "type": "string",
+                      "title": "Descrizione del documento allegato alla fattura elettronica",
+                      "maxLength": 100
+                    }
+                  },
+                  "required": ["NomeAttachment", "Attachment"]
+                }
+              },
+              "DatiVeicoli": {},
+              "DatiPagamento": {
+                "type": "array",
+                "title": "Dati di pagamento",
+                "items": {
+                  "type": "object",
+                  "title": "Dato di pagamento",
+                  "properties": {
+                    "CondizioniPagamento": {
+                      "type": "string",
+                      "title": "Codice che identifica le condizioni di pagamento",
+                      "description": "TP01: pagamento a rate, TP02: pagamento completo, TP03: anticipo",
+                      "pattern": "^TP[0-9]{2}$",
+                      "default": "",
+                      "examples": [
+                        "TP01"
+                      ]
+                    },
+                    "DettaglioPagamento": {
+                      "type": "object",
+                      "title": "Dettaglio del pagamento",
+                      "properties": {
+                        "ModalitaPagamento": {
+                          "type": "string",
+                          "title": "Codice che identifica le modalità di pagamento",
+                          "description": "MP01: contanti, MP02: assegno, MP03: assegno circolare, MP04: contanti presso Tesoreria, MP05: bonifico, MP06: vaglia cambiario, MP07: bollettino bancario, MP08: carta di pagamento, MP09: RID, MP10: RID utenze, MP11: RID veloce, MP12: Riba, MP13: MAV, MP14: quietanza erario stato, MP15: giroconto su conti di contabilità speciale, MP16: domiciliazione bancaria, MP17: domiciliazione postale, MP18: bollettino di c/c postale, MP19: SEPA Direct Debit, MP20: SEPA Direct Debit CORE, MP21: SEPA Direct Debit B2B, MP22: Trattenuta su somme già riscosse",
+                          "default": "",
+                          "examples": [
+                            "MP01"
+                          ]
+                        },
+                        "DataScadenzaPagamento": {
+                          "type": "string",
+                          "title": "Data di scadenza del pagamento",
+                          "description": "Rappresentata secondo il formato ISO 8601:2004 (https://it.wikipedia.org/wiki/ISO_8601), con la seguente precisione: YYYY-MM-DD",
+                          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "2017-02-18"
+                          ]
+                        },
+                        "ImportoPagamento": {
+                          "type": "string",
+                          "title": "Importo relativo al pagamento",
+                          "pattern": "^-?[0-9]{1,11}\\.[0-9]{2}$",
+                          "default": "",
+                          "examples": [
+                            "6.10"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": ["DatiGenerali", "DatiBeniServizi"]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": ["versione", "FatturaElettronicaHeader", "FatturaElettronicaBody"]
+    }
+  },
+  "additionalProperties": false,
+  "required": ["FatturaElettronica"]
+}

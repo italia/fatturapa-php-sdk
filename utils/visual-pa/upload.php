@@ -40,39 +40,50 @@ function read($filename, $target_dir) {
     $path = $protocol . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . "/" . $target_dir . $filename;
     $xml = simplexml_load_file($path);
 	
-    //FatturaElettronicaHeader - DatiTrasmissione
-    global $DatiTrasmissioneIdPaese; 
-    global $DatiTrasmissioneIdCodice;
-    global $ProgressivoInvio;
-    global $FormatoTrasmissione;
-    global $CodiceDestinatario;
+    // rint_r($xml);
 
-    $DatiTrasmissioneIdPaese = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdPaese;
-    $DatiTrasmissioneIdCodice = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdCodice;
-    $ProgressivoInvio = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->ProgressivoInvio;
-    $FormatoTrasmissione =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->FormatoTrasmissione;
-    $CodiceDestinatario =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->CodiceDestinatario;
+foreach($xml->FatturaElettronicaHeader->DatiTrasmissione->children() as $books) { 
+    echo $books->IdPaese . "<br>"; 
+    echo $books->IdCodice . "<br>"; 
+    echo $books->ProgressivoInvio . "s<br>"; 
+    echo $books->FormatoTrasmissione . "s<br>";
+    echo $books->CodiceDestinatario . "s<br>"; 
+} 
 
-    //FatturaElettronicaHeader - CedentePrestatore
-    global $CedentePrestatoreIdPaese; 
-    global $CedentePrestatoreIdCodice;
-    global $Denominazione;
-    global $RegimeFiscale;
-    global $CedentePrestatoreIndirizzo;
-    global $CedentePrestatoreCap;
-    global $CedentePrestatoreComune;
-    global $CedentePrestatoreProvincia;
-    global $CedentePrestatoreNazione;
 
-    $CedentePrestatoreIdPaese = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdPaese;
-    $CedentePrestatoreIdCodice = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdCodice;
-    $Denominazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->Anagrafica[0]->Denominazione;
-    $RegimeFiscale = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->RegimeFiscale;
-    $CedentePrestatoreIndirizzo = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Indirizzo;
-    $CedentePrestatoreCap = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->CAP;
-    $CedentePrestatoreComune = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Comune;
-    $CedentePrestatoreProvincia = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Provincia;
-    $CedentePrestatoreNazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Nazione;
+    // //FatturaElettronicaHeader - DatiTrasmissione
+    // global $DatiTrasmissioneIdPaese; 
+    // global $DatiTrasmissioneIdCodice;
+    // global $ProgressivoInvio;
+    // global $FormatoTrasmissione;
+    // global $CodiceDestinatario;
+
+    // $DatiTrasmissioneIdPaese = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdPaese;
+    // $DatiTrasmissioneIdCodice = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdCodice;
+    // $ProgressivoInvio = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->ProgressivoInvio;
+    // $FormatoTrasmissione =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->FormatoTrasmissione;
+    // $CodiceDestinatario =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->CodiceDestinatario;
+
+    // //FatturaElettronicaHeader - CedentePrestatore
+    // global $CedentePrestatoreIdPaese; 
+    // global $CedentePrestatoreIdCodice;
+    // global $Denominazione;
+    // global $RegimeFiscale;
+    // global $CedentePrestatoreIndirizzo;
+    // global $CedentePrestatoreCap;
+    // global $CedentePrestatoreComune;
+    // global $CedentePrestatoreProvincia;
+    // global $CedentePrestatoreNazione;
+
+    // $CedentePrestatoreIdPaese = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdPaese;
+    // $CedentePrestatoreIdCodice = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdCodice;
+    // $Denominazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->Anagrafica[0]->Denominazione;
+    // $RegimeFiscale = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->RegimeFiscale;
+    // $CedentePrestatoreIndirizzo = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Indirizzo;
+    // $CedentePrestatoreCap = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->CAP;
+    // $CedentePrestatoreComune = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Comune;
+    // $CedentePrestatoreProvincia = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Provincia;
+    // $CedentePrestatoreNazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Nazione;
 }
 
 if($DatiTrasmissioneIdPaese != ""): ?>
