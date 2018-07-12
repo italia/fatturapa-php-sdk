@@ -38,55 +38,11 @@ if ($uploadOk == 0) {
 function read($filename, $target_dir) {
     $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
     $path = $protocol . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . "/" . $target_dir . $filename;
-    $xml = simplexml_load_file($path);
-	
-    // rint_r($xml);
-
-foreach($xml->FatturaElettronicaHeader->DatiTrasmissione->children() as $books) { 
-    echo $books->IdPaese . "<br>"; 
-    echo $books->IdCodice . "<br>"; 
-    echo $books->ProgressivoInvio . "s<br>"; 
-    echo $books->FormatoTrasmissione . "s<br>";
-    echo $books->CodiceDestinatario . "s<br>"; 
-} 
-
-
-    // //FatturaElettronicaHeader - DatiTrasmissione
-    // global $DatiTrasmissioneIdPaese; 
-    // global $DatiTrasmissioneIdCodice;
-    // global $ProgressivoInvio;
-    // global $FormatoTrasmissione;
-    // global $CodiceDestinatario;
-
-    // $DatiTrasmissioneIdPaese = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdPaese;
-    // $DatiTrasmissioneIdCodice = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdCodice;
-    // $ProgressivoInvio = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->ProgressivoInvio;
-    // $FormatoTrasmissione =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->FormatoTrasmissione;
-    // $CodiceDestinatario =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->CodiceDestinatario;
-
-    // //FatturaElettronicaHeader - CedentePrestatore
-    // global $CedentePrestatoreIdPaese; 
-    // global $CedentePrestatoreIdCodice;
-    // global $Denominazione;
-    // global $RegimeFiscale;
-    // global $CedentePrestatoreIndirizzo;
-    // global $CedentePrestatoreCap;
-    // global $CedentePrestatoreComune;
-    // global $CedentePrestatoreProvincia;
-    // global $CedentePrestatoreNazione;
-
-    // $CedentePrestatoreIdPaese = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdPaese;
-    // $CedentePrestatoreIdCodice = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdCodice;
-    // $Denominazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->Anagrafica[0]->Denominazione;
-    // $RegimeFiscale = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->RegimeFiscale;
-    // $CedentePrestatoreIndirizzo = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Indirizzo;
-    // $CedentePrestatoreCap = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->CAP;
-    // $CedentePrestatoreComune = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Comune;
-    // $CedentePrestatoreProvincia = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Provincia;
-    // $CedentePrestatoreNazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Nazione;
+    //$xml = simplexml_load_file($path);
+    global $xml;
+    $xml = file_get_contents($path);
 }
-
-if($DatiTrasmissioneIdPaese != ""): ?>
+?>
 
 <!doctype html>
 <html>
@@ -95,10 +51,55 @@ if($DatiTrasmissioneIdPaese != ""): ?>
     <title>Fattura Elettronica leggibile</title>
       <link rel="stylesheet" type="text/css" href="css/custom.css">
       <link rel="stylesheet" type="text/css" href="css/bootstrap-italia.min.css">
-      <link rel="stylesheet" type="text/css" href="css/italia-icon-font.css">
+      <link rel="stylesheet" type="text/css" href="css/italia-icon-font.css">   
 </head>
 
 <body>
+    <script>  
+        var xml = toString(" <?php echo $xml; ?> ");
+        console.log(xml);
+
+        function xmlToJson(xml) {
+            alert("ok");
+            // Create the return object
+            var obj = {};
+
+            if (xml.nodeType == 1) { // element
+                // do attributes
+                if (xml.attributes.length > 0) {
+                obj["@attributes"] = {};
+                    for (var j = 0; j < xml.attributes.length; j++) {
+                        var attribute = xml.attributes.item(j);
+                        obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
+                    }
+                }
+            } else if (xml.nodeType == 3) { // text
+                obj = xml.nodeValue;
+            }
+
+            // do children
+            if (xml.hasChildNodes()) {
+                for(var i = 0; i < xml.childNodes.length; i++) {
+                    var item = xml.childNodes.item(i);
+                    var nodeName = item.nodeName;
+                    if (typeof(obj[nodeName]) == "undefined") {
+                        obj[nodeName] = xmlToJson(item);
+                    } else {
+                        if (typeof(obj[nodeName].length) == "undefined") {
+                            var old = obj[nodeName];
+                            obj[nodeName] = [];
+                            obj[nodeName].push(old);
+                        }
+                        obj[nodeName].push(xmlToJson(item));
+                    }
+                }
+            }
+            return obj;
+        };
+        var xmlDOM = new DOMParser().parseFromString(xml, 'text/xml');
+        var json = xmlToJson(xmlDOM);
+        echo(json);
+    </script>
 
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
@@ -225,4 +226,3 @@ if($DatiTrasmissioneIdPaese != ""): ?>
     </div>
 </body>
 </html>
-<?php endif ?>
