@@ -120,8 +120,8 @@ function read($filename, $target_dir) {
                             <td>
                                 <b>Dati Trasmissione</b><br>
                                 Id Paese: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->IdTrasmittente->IdPaese; ?><br>
-                                Id Codice: <?php echo $DatiTrasmissioneIdCodice; ?><br>
-                                Progressivo Invio: <?php echo $ProgressivoInvio; ?><br>
+                                Id Codice: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->IdTrasmittente->IdCodice;  ?><br>
+                                Progressivo Invio: <?php ?><br>
                                 Codice Destinatario: <?php echo $CodiceDestinatario; ?><br>
                             </td>
                         </tr>
