@@ -1,6 +1,5 @@
 <?php
 //test
-require_once("parser.php");
 $target_dir = "uploads/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
@@ -30,7 +29,7 @@ if ($uploadOk == 0) {
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         // echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-        read(basename($_FILES["fileToUpload"]["name"]), $target_dir);
+        $data = read(basename($_FILES["fileToUpload"]["name"]), $target_dir);
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
@@ -43,10 +42,11 @@ function read($filename, $target_dir) {
     //$xml = simplexml_load_file($path);
     global $xml;
     $xml = file_get_contents($path);
+    $xml = new SimpleXMLElement($xml);
+    return $xml;
 }
 
-$parser = new parser();
-$data = $parser->getData($_FILES);
+
 
 ?>
 
@@ -114,12 +114,12 @@ $data = $parser->getData($_FILES);
                     <table>
                         <tr>
                             <td class="title">
-                                <?php echo $DatiTrasmissioneIdPaese; ?>
+                                <?php ; ?>
                             </td>
                             
                             <td>
                                 <b>Dati Trasmissione</b><br>
-                                Id Paese: <?php echo $DatiTrasmissioneIdPaese; ?><br>
+                                Id Paese: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->IdTrasmittente->IdPaese; ?><br>
                                 Id Codice: <?php echo $DatiTrasmissioneIdCodice; ?><br>
                                 Progressivo Invio: <?php echo $ProgressivoInvio; ?><br>
                                 Codice Destinatario: <?php echo $CodiceDestinatario; ?><br>

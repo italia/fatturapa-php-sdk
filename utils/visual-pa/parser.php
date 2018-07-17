@@ -4,9 +4,10 @@ class parser {
 	
 	public function getData($xml) {
 
-		echo "<pre>";
-		var_dump($xml);
-		echo "</pre>";
+		$xml = new SimpleXMLElement($xml);
+
+		var_dump($xml->FatturaElettronicaHeader);
+
 
 		die;
 
