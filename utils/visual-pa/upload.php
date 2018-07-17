@@ -135,10 +135,10 @@ function read($filename, $target_dir) {
                         <tr>
                             <td>
                                 <b>Cedente Prestatore</b><br>
-                                Id Paese: <?php echo $CedentePrestatoreIdPaese; ?><br>
-                                Id Codice: <?php echo $CedentePrestatoreIdCodice; ?><br>
-                                Denominazione: <?php echo $Denominazione; ?><br>
-                                Regime Fiscale: <?php echo $RegimeFiscale; ?><br>
+                                Id Paese: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->DatiAnagrafici->IdFiscaleIVA->IdPaese; ?><br>
+                                Id Codice: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->DatiAnagrafici->IdFiscaleIVA->IdCodice; ?><br>
+                                Denominazione: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->DatiAnagrafici->Anagrafica->Anagrafica; ?><br>
+                                Regime Fiscale: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->DatiAnagrafici->RegimeFiscale; ?><br>
                             </td>
                             
                             <td>
