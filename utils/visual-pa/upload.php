@@ -121,8 +121,8 @@ function read($filename, $target_dir) {
                                 <b>Dati Trasmissione</b><br>
                                 Id Paese: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->IdTrasmittente->IdPaese; ?><br>
                                 Id Codice: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->IdTrasmittente->IdCodice;  ?><br>
-                                Progressivo Invio: <?php ?><br>
-                                Codice Destinatario: <?php echo $CodiceDestinatario; ?><br>
+                                Progressivo Invio: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->ProgressivoInvio; ?><br>
+                                Codice Destinatario: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->CodiceDestinatario; ?><br>
                             </td>
                         </tr>
                     </table>
