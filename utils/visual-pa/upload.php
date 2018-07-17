@@ -1,5 +1,6 @@
 <?php
 //test
+require_once("parser.php");
 $target_dir = "uploads/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
@@ -43,6 +44,10 @@ function read($filename, $target_dir) {
     global $xml;
     $xml = file_get_contents($path);
 }
+
+$parser = new parser();
+$data = $parser->getData($_FILES);
+
 ?>
 
 <!doctype html>
