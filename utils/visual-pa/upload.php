@@ -47,7 +47,6 @@ function read($filename, $target_dir) {
 }
 ?>
 
-<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
