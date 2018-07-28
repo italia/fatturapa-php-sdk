@@ -51,17 +51,62 @@ function read($filename, $target_dir) {
 <head>
     <meta charset="utf-8">
     <title>Fattura Elettronica leggibile</title>
-      <link rel="stylesheet" type="text/css" href="css/custom.css">
-      <link rel="stylesheet" type="text/css" href="css/bootstrap-italia.min.css">
-      <link rel="stylesheet" type="text/css" href="css/italia-icon-font.css">   
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-italia.min.css">
+    <link rel="stylesheet" type="text/css" href="css/italia-icon-font.css">   
+    <script src="js/jspdf.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+ <script>
+    function demoFromHTML() {
+        var pdf = new jsPDF('p', 'pt', 'letter');
+        // source can be HTML-formatted string, or a reference
+        // to an actual DOM element from which the text will be scraped.
+        source = $('#content')[0];
+
+        // we support special element handlers. Register them with jQuery-style 
+        // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+        // There is no support for any other type of selectors 
+        // (class, of compound) at this time.
+        specialElementHandlers = {
+            // element with id of "bypass" - jQuery style selector
+            '#bypassme': function (element, renderer) {
+                // true = "handled elsewhere, bypass text extraction"
+                return true
+            }
+        };
+        margins = {
+            top: 80,
+            bottom: 60,
+            left: 40,
+            width: 522
+        };
+        // all coords and widths are in jsPDF instance's declared units
+        // 'inches' in this case
+        pdf.fromHTML(
+            source, // HTML string or DOM elem ref.
+            margins.left, // x coord
+            margins.top, { // y coord
+                'width': margins.width, // max width of content on PDF
+                'elementHandlers': specialElementHandlers
+            },
+
+            function (dispose) {
+                // dispose: object with X, Y of the last line add to the PDF 
+                //          this allow the insertion of new lines after html
+                pdf.save('Test.pdf');
+            }, margins
+        );
+    }
+</script>
 </head>
 
 <body>
+        <a href="javascript:demoFromHTML()" class="button">Download PDF</a>
 
-    <div class="invoice-box">
+    <div class="invoice-box" id="content">
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
-                <td colspan="2">
+                <td>
                     <table>
                         <tr>                            
                             <td>
@@ -77,7 +122,7 @@ function read($filename, $target_dir) {
             </tr>
             
             <tr class="information">
-                <td colspan="2">
+                <td>
                     <table>
                         <tr>
                             <td>
@@ -100,7 +145,7 @@ function read($filename, $target_dir) {
                 </td>
             </tr>
             <tr class="information">
-                <td colspan="2">
+                <td>
                     <table>
                         <tr>
                             <td>
@@ -583,13 +628,11 @@ function read($filename, $target_dir) {
             </tr>
 
             <tr>
-                <td colspan="2" class="centered">
+                <td class="centered">
                     <small>Fattura generata dal file <?php echo(basename( $_FILES["fileToUpload"]["name"])); ?><small>
                 </td>
             </tr>            
         </table>
-        
-        <p></p>
         
     </div>
 </body>
