@@ -1,5 +1,4 @@
 <?php
-//test
 $target_dir = "uploads/";
 $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 $uploadOk = 1;
@@ -29,7 +28,7 @@ if ($uploadOk == 0) {
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         // echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-        $data = read(basename($_FILES["fileToUpload"]["name"]), $target_dir);
+        read(basename($_FILES["fileToUpload"]["name"]), $target_dir);
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
@@ -39,82 +38,156 @@ if ($uploadOk == 0) {
 function read($filename, $target_dir) {
     $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
     $path = $protocol . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . "/" . $target_dir . $filename;
-    //$xml = simplexml_load_file($path);
-    global $xml;
-    $xml = file_get_contents($path);
-    $xml = new SimpleXMLElement($xml);
-    return $xml;
+    $xml = simplexml_load_file($path);
+    
+    //FatturaElettronicaHeader - DatiTrasmissione
+    global $DatiTrasmissioneIdPaese; 
+    global $DatiTrasmissioneIdCodice;
+    global $ProgressivoInvio;
+    global $FormatoTrasmissione;
+    global $CodiceDestinatario;
+
+    $DatiTrasmissioneIdPaese = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdPaese;
+    $DatiTrasmissioneIdCodice = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->IdTrasmittente[0]->IdCodice;
+    $ProgressivoInvio = $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->ProgressivoInvio;
+    $FormatoTrasmissione =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->FormatoTrasmissione;
+    $CodiceDestinatario =  $xml->FatturaElettronicaHeader[0]->DatiTrasmissione[0]->CodiceDestinatario;
+
+    //FatturaElettronicaHeader - CedentePrestatore
+    global $CedentePrestatoreIdPaese; 
+    global $CedentePrestatoreIdCodice;
+    global $Denominazione;
+    global $RegimeFiscale;
+    global $CedentePrestatoreIndirizzo;
+    global $CedentePrestatoreCap;
+    global $CedentePrestatoreComune;
+    global $CedentePrestatoreProvincia;
+    global $CedentePrestatoreNazione;
+
+    $CedentePrestatoreIdPaese = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdPaese;
+    $CedentePrestatoreIdCodice = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->IdFiscaleIVA[0]->IdCodice;
+    $Denominazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->Anagrafica[0]->Denominazione;
+    $RegimeFiscale = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->DatiAnagrafici[0]->RegimeFiscale;
+    $CedentePrestatoreIndirizzo = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Indirizzo;
+    $CedentePrestatoreCap = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->CAP;
+    $CedentePrestatoreComune = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Comune;
+    $CedentePrestatoreProvincia = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Provincia;
+    $CedentePrestatoreNazione = $xml->FatturaElettronicaHeader[0]->CedentePrestatore[0]->Sede[0]->Nazione;
+    
+    global $CessionarioCommittenteCodicefiscale;
+    global $Anagrafica;
+    global $IndirizzoCessionario;
+    global $CapCessionario;
+    global $ComuneCessionario;
+    global $ProvinciaCessionario;
+    global $NazioneCessionario;
+    
+
+    // CessionarioCommittente
+    $CessionarioCommittenteCodicefiscale = $xml->FatturaElettronicaHeader[0]->CessionarioCommittente[0]->DatiAnagrafici[0]->CodiceFiscale;
+    $Anagrafica = $xml->FatturaElettronicaHeader[0]->CessionarioCommittente[0]->DatiAnagrafici[0]->Anagrafica[0]->Denominazione;
+    $Anagrafica = $xml->FatturaElettronicaHeader[0]->CessionarioCommittente[0]->DatiAnagrafici[0]->Anagrafica[0]->Denominazione;
+    $IndirizzoCessionario=$xml->FatturaElettronicaHeader[0]->CessionarioCommittente[0]->Sede[0]->Indirizzo;
+    $CapCessionario=$xml->FatturaElettronicaHeader[0]->CessionarioCommittente[0]->Sede[0]->CAP;
+    $ComuneCessionario=$xml->FatturaElettronicaHeader[0]->CessionarioCommittente[0]->Sede[0]->Comune;
+    $ProvinciaCessionario=$xml->FatturaElettronicaHeader[0]->CessionarioCommittente[0]->Sede[0]->Provincia;
+    $NazioneCessionario=$xml->FatturaElettronicaHeader[0]->CessionarioCommittente[0]->Sede[0]->Nazione;
+
+    //FatturaElettronicaBody - Dati Generali Documento 
+    global $TipoDocumentoBody; 
+    global $DivisaBody;
+    global $DataBody;
+    global $NumeroBody;
+    global $CausaleBody;
+
+    $TipoDocumentoBody = $xml->FatturaElettronicaBody[0]->DatiGenerali->DatiGeneraliDocumento[0]->TipoDocumento;
+    $DivisaBody = $xml->FatturaElettronicaBody[0]->DatiGenerali->DatiGeneraliDocumento[0]->Divisa;
+    $DataBody = $xml->FatturaElettronicaBody[0]->DatiGenerali->DatiGeneraliDocumento[0]->Data;
+    $NumeroBody = $xml->FatturaElettronicaBody[0]->DatiGenerali->DatiGeneraliDocumento[0]->Numero;
+    $CausaleBody = $xml->FatturaElettronicaBody[0]->DatiGenerali->DatiGeneraliDocumento[0]->Causale;
+
+    //FatturaElettronicaBody - Dati Ordine Acquisto 
+    global $RiferimentoNumero; 
+    global $IdDocumentoBody;
+    global $NumItemBody;
+
+    $RiferimentoNumero = $xml->FatturaElettronicaBody[0]->DatiGenerali->DatiOrdineAcquisto[0]->RiferimentoNumeroLinea;
+    $IdDocumentoBody = $xml->FatturaElettronicaBody[0]->DatiGenerali->DatiOrdineAcquisto[0]->IdDocumento;
+    $NumItemBody = $xml->FatturaElettronicaBody[0]->DatiGenerali->DatiOrdineAcquisto[0]->NumItem;
+
+    //FatturaElettronicaBody - Dati trasporto
+    global $IdPaeseTrasporto;
+    global $IdCodiceTrasporto;
+    global $AnagraficaTrasporto;
+    global $DataOra;
+
+    $IdPaeseTrasporto = $xml->FatturaElettronicaBody[0]->DatiGenerali->DatiTrasporto[0]->DatiAnagraficiVettore[0]->IdFiscaleIVA[0]->IdPaese;
+    $IdCodiceTrasporto =$xml->FatturaElettronicaBody[0]->DatiGenerali->DatiTrasporto[0]->DatiAnagraficiVettore[0]->IdFiscaleIVA[0]->IdCodice;
+    $AnagraficaTrasporto =$xml->FatturaElettronicaBody[0]->DatiGenerali->DatiTrasporto[0]->DatiAnagraficiVettore[0]->Anagrafica[0]->Denominazione;
+    $DataOra =$xml->FatturaElettronicaBody[0]->DatiGenerali->DatiTrasporto[0]->DataOraConsegna;
+
+    //FatturaElettronicaBody - Righe della fattura
+
+    global $NumeroLineaRiga;
+    global $DescrizioneRiga;
+    global $QuantitaRiga;
+    global $PrezzoUnitarioRiga;
+    global $PrezzoTotaleRiga;
+    global $AliquotaIVARiga;
+
+    $NumeroLineaRiga =$xml->FatturaElettronicaBody[0]->DatiBeniServizi;
+
+    //FatturaElettronicaBody - Dati riepilogo fattura
+
+    global $AliquotaIVARiepilogo;
+    global $ImponibileImportoRiepilogo;
+    global $ImpostaRiepilogo;
+    global $EsigibilitaIVARiepilogo;
+
+    $AliquotaIVARiepilogo =$xml->FatturaElettronicaBody[0]->DatiBeniServizi->DatiRiepilogo->AliquotaIVA;
+    $ImponibileImportoRiepilogo =$xml->FatturaElettronicaBody[0]->DatiBeniServizi->DatiRiepilogo->ImponibileImporto;
+    $ImpostaRiepilogo =$xml->FatturaElettronicaBody[0]->DatiBeniServizi->DatiRiepilogo->Imposta;
+    $EsigibilitaIVARiepilogo =$xml->FatturaElettronicaBody[0]->DatiBeniServizi->DatiRiepilogo->EsigibilitaIVA;
+
+
+    //FatturaElettronicaBody - Dati pagamento
+
+    global $CondizioniPagamentoRiepilogo;
+    global $ModalitaPagamentoRiepilogo;
+    global $DataScadenzaPagamentoRiepilogo;
+    global $ImportoPagamentoRiepilogo;
+    
+    $CondizioniPagamentoRiepilogo =$xml->FatturaElettronicaBody[0]->DatiPagamento->CondizioniPagamento;
+    $ModalitaPagamentoRiepilogo=$xml->FatturaElettronicaBody[0]->DatiPagamento->DettaglioPagamento->ModalitaPagamento;
+    $DataScadenzaPagamentoRiepilogo=$xml->FatturaElettronicaBody[0]->DatiPagamento->DettaglioPagamento->DataScadenzaPagamento;
+    $ImportoPagamentoRiepilogo=$xml->FatturaElettronicaBody[0]->DatiPagamento->DettaglioPagamento->ImportoPagamento;
+
+
 }
-?>
 
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Fattura Elettronica leggibile</title>
-    <link rel="stylesheet" type="text/css" href="css/custom.css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap-italia.min.css">
-    <link rel="stylesheet" type="text/css" href="css/italia-icon-font.css">   
-    <script src="js/jspdf.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
- <script>
-    function demoFromHTML() {
-        var pdf = new jsPDF('p', 'pt', 'letter');
-        // source can be HTML-formatted string, or a reference
-        // to an actual DOM element from which the text will be scraped.
-        source = $('#content')[0];
+if($DatiTrasmissioneIdPaese != ""): ?>
 
-        // we support special element handlers. Register them with jQuery-style 
-        // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
-        // There is no support for any other type of selectors 
-        // (class, of compound) at this time.
-        specialElementHandlers = {
-            // element with id of "bypass" - jQuery style selector
-            '#bypassme': function (element, renderer) {
-                // true = "handled elsewhere, bypass text extraction"
-                return true
-            }
-        };
-        margins = {
-            top: 80,
-            bottom: 60,
-            left: 40,
-            width: 522
-        };
-        // all coords and widths are in jsPDF instance's declared units
-        // 'inches' in this case
-        pdf.fromHTML(
-            source, // HTML string or DOM elem ref.
-            margins.left, // x coord
-            margins.top, { // y coord
-                'width': margins.width, // max width of content on PDF
-                'elementHandlers': specialElementHandlers
-            },
 
-            function (dispose) {
-                // dispose: object with X, Y of the last line add to the PDF 
-                //          this allow the insertion of new lines after html
-                pdf.save('Test.pdf');
-            }, margins
-        );
-    }
-</script>
-</head>
+<div class="content-wrapper" style="min-height: 1126px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
 
-<body>
-        <a href="javascript:demoFromHTML()" class="button">Download PDF</a>
-
-    <div class="invoice-box" id="content">
-        <table cellpadding="0" cellspacing="0">
+    <div class="invoice-box">
+        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
             <tr class="top">
-                <td>
+                <td colspan="2">
                     <table>
-                        <tr>                            
+                        <tr>
+                            <td class="title">
+                                <?php echo $DatiTrasmissioneIdPaese; ?>
+                            </td>
+                            
                             <td>
                                 <b>Dati Trasmissione</b><br>
-                                Id Paese: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->IdTrasmittente->IdPaese; ?><br>
-                                Id Codice: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->IdTrasmittente->IdCodice;  ?><br>
-                                Progressivo Invio: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->ProgressivoInvio; ?><br>
-                                Codice Destinatario: <?php echo $data->FatturaElettronicaHeader->DatiTrasmissione->CodiceDestinatario; ?><br>
+                                Id Paese: <?php echo $DatiTrasmissioneIdPaese; ?><br>
+                                Id Codice: <?php echo $DatiTrasmissioneIdCodice; ?><br>
+                                Progressivo Invio: <?php echo $ProgressivoInvio; ?><br>
+                                Codice Destinatario: <?php echo $CodiceDestinatario; ?><br>
                             </td>
                         </tr>
                     </table>
@@ -122,518 +195,159 @@ function read($filename, $target_dir) {
             </tr>
             
             <tr class="information">
-                <td>
+                <td colspan="2">
                     <table>
                         <tr>
                             <td>
                                 <b>Cedente Prestatore</b><br>
-                                Id Paese: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->DatiAnagrafici->IdFiscaleIVA->IdPaese; ?><br>
-                                Id Codice: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->DatiAnagrafici->IdFiscaleIVA->IdCodice; ?><br>
-                                Denominazione: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->DatiAnagrafici->Anagrafica->Anagrafica; ?><br>
-                                Regime Fiscale: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->DatiAnagrafici->RegimeFiscale; ?><br>
-                            </td>
-                            
-                            <td>
-                                Indirizzo: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->Indirizzo; ?><br>
-                                CAP: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->CAP; ?><br>
-                                Comune: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->Comune; ?><br>
-                                Provincia: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->Provincia; ?><br>
-                                Nazione: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->Nazione; ?><br>
+                                Id Paese: <?php echo $CedentePrestatoreIdPaese; ?><br>
+                                Id Codice: <?php echo $CedentePrestatoreIdCodice; ?><br>
+                                Denominazione: <?php echo $Denominazione; ?><br>
+                                Regime Fiscale: <?php echo $RegimeFiscale; ?><br>
+                         
+                                Indirizzo: <?php echo $CedentePrestatoreIndirizzo; ?><br>
+                                CAP: <?php echo $CedentePrestatoreCap; ?><br>
+                                Comune: <?php echo $CedentePrestatoreComune; ?><br>
+                                Provincia: <?php echo $CedentePrestatoreProvincia; ?><br>
+                                Nazione: <?php echo $CedentePrestatoreNazione; ?><br>
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
-            <tr class="information">
-                <td>
+
+                <tr class="information">
+                <td colspan="2">
                     <table>
                         <tr>
                             <td>
-                                <b>Concessionario/Committente</b><br>
-                                Codice Fiscale: <?php echo $data->FatturaElettronicaHeader->CessionarioCommittente->DatiAnagrafici->CodiceFiscale; ?><br>
-                                Denominazione: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->DatiAnagrafici->Anagrafica->Denominazione; ?><br>
-                                Indirizzo: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->Indirizzo; ?><br>
-                                CAP: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->CAP; ?><br>
-								Comune: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->Comune; ?><br>
-								Provincia: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->Provincia; ?><br>
-								Nazione: <?php echo $data->FatturaElettronicaHeader->CedentePrestatore->Sede->Nazione; ?><br>
+                                <b>Cessionario Committente</b><br>
+                                Codice Fiscale: <?php echo $CessionarioCommittenteCodicefiscale; ?><br>
+                                Anagrafica: <?php echo $Anagrafica; ?><br>
+                                Indirizzo: <?php echo $IndirizzoCessionario; ?><br>
+                                CAP: <?php echo $CapCessionario; ?><br>
+                                Comune: <?php echo $ComuneCessionario; ?><br>
+                                Provincia: <?php echo $ProvinciaCessionario; ?><br>
+                                Nazione: <?php echo $NazioneCessionario; ?><br>
+                                
                             </td>
                         </tr>
                     </table>
                 </td>
-            </tr>   
-            <tr class="heading">
+            </tr>
+                   <tr class="information">
                 <td colspan="2">
-                    Corpo della fattura: dati generali
+                    <table>
+                        <tr>
+                            <td>
+                                <b>Dati Generali Documento</b><br>
+                                Dati Documento: <?php echo $TipoDocumentoBody; ?><br>
+                                Divisa: <?php echo $DivisaBody; ?><br>
+                                Data: <?php echo $DataBody; ?><br>
+                                Numero: <?php echo $NumeroBody; ?><br>
+                         
+                                Causale: <?php echo $CausaleBody; ?><br>
+                                Riferimento Numero Linea: <?php echo $RiferimentoNumero; ?><br>
+                                Id Documento: <?php echo $IdDocumentoBody; ?><br>
+                                Numero Item: <?php echo $NumItemBody; ?><br>
+                               
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
-            
-            <tr class="details">
-                <td>
-                    Tipo di documento
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiGeneraliDocumento->TipoDocumento; ?>
-                </td>
-            </tr>
-            <tr class="details">
-                <td>
-                    Divisa
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiGeneraliDocumento->Divisa; ?>
-                </td>
-            </tr> 
-            <tr class="details">
-                <td>
-                    Data
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiGeneraliDocumento->Data; ?>
-                </td>
-            </tr>
-            <tr class="details">
-                <td>
-                    Numero
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiGeneraliDocumento->Numero; ?>
-                </td>
-            </tr>			
-            <tr class="details">
-                <td>
-                    Causale
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiGeneraliDocumento->Causale; ?>
-                </td>
-            </tr>
-            <tr class="heading">
-                <td colspan="2">
-                    Ordine Acquisto
-                </td>
-            </tr>
-            
-            <tr class="item">
-                <td>
-                    Rif. num. linea
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiOrdineAcquisto->RiferimentoNumeroLinea; ?>
-                </td>
-            </tr>
-			
-            <tr class="item">
-                <td>
-                    ID documento
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiOrdineAcquisto->IdDocumento; ?>
-                </td>
-            </tr>			
-            
-            <tr class="item">
-                <td>
-                    Numero oggetto
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiOrdineAcquisto->NumItem; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    CodiceCUP
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiOrdineAcquisto->CodiceCUP; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    CodiceCIG
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiOrdineAcquisto->CodiceCIG; ?>
-                </td>
-            </tr>    
-			<!-- fine ordine acquisto -->
-			<!-- dati contratto -->
-            <tr class="heading">
-                <td colspan="2">
-                    Dati contratto
-                </td>
-            </tr>
-            
-            <tr class="item">
-                <td>
-                    Rif. num. linea
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiContratto->RiferimentoNumeroLinea; ?>
-                </td>
-            </tr>
-			
-            <tr class="item">
-                <td>
-                    ID documento
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiContratto->IdDocumento; ?>
-                </td>
-            </tr>			
-            
-            <tr class="item">
-                <td>
-                    Numero oggetto
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiContratto->NumItem; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    CodiceCUP
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiContratto->CodiceCUP; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    CodiceCIG
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiContratto->CodiceCIG; ?>
-                </td>
-            </tr>    			
-			<!-- fine dati contratto -->
-			<!-- dati convenzione -->
-            <tr class="heading">
-                <td colspan="2">
-                    Dati convenzione
-                </td>
-            </tr>
-            
-            <tr class="item">
-                <td>
-                    Rif. num. linea
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiConvenzione->RiferimentoNumeroLinea; ?>
-                </td>
-            </tr>
-			
-            <tr class="item">
-                <td>
-                    ID documento
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiConvenzione->IdDocumento; ?>
-                </td>
-            </tr>			
-            
-            <tr class="item">
-                <td>
-                    Numero oggetto
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiConvenzione->NumItem; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    CodiceCUP
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiContratto->CodiceCUP; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    CodiceCIG
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiConvenzione->CodiceCIG; ?>
-                </td>
-            </tr>  			
-			<!-- fine dati convenzione -->
-			<!-- dati ricezione -->
-            <tr class="heading">
-                <td colspan="2">
-                    Dati ricezione
-                </td>
-            </tr>
-            
-            <tr class="item">
-                <td>
-                    Rif. num. linea
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiRicezione->RiferimentoNumeroLinea; ?>
-                </td>
-            </tr>
-			
-            <tr class="item">
-                <td>
-                    ID documento
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiRicezione->IdDocumento; ?>
-                </td>
-            </tr>			
-            
-            <tr class="item">
-                <td>
-                    Numero oggetto
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiRicezione->NumItem; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    CodiceCUP
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiRicezione->CodiceCUP; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    CodiceCIG
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiRicezione->CodiceCIG; ?>
-                </td>
-            </tr> 
-			<!-- fine dati ricezione -->
-			<!-- inizio dati trasporto -->
-           <tr class="heading">
-                <td colspan="2">
-                    Dati trasporto
-                </td>
-            </tr>
-            
-            <tr class="item">
-                <td>
-                    ID Paese
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiTrasporto->DatiAnagraficiVettore->IdFiscaleIVAIdFiscaleIVA->IdPaese; ?>
-                </td>
-            </tr>
-			
-            <tr class="item">
-                <td>
-                    ID codice
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiTrasporto->DatiAnagraficiVettore->IdFiscaleIVAIdFiscaleIVA->IdCodice; ?>
-                </td>
-            </tr>			
-            
-            <tr class="item">
-                <td>
-                   Denominazione
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiTrasporto->DatiAnagraficiVettore->Anagrafica->Denominazione; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    Data e Ora Consegna
-                </td>
-                
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiGenerali->DatiTrasporto->DataOraConsegna; ?>
-                </td>
-            </tr>
-			<!-- fine dati trasporto -->
-			<!-- inizio dettaglie linee FOREACH* -->
-			<tr class="heading">
-				<td colspan="2">
-					Dati Beni/servizio dettaglio linee
-				</td>
-			</tr>
-			<!-- foreach DettaglioLinee -->
-			<tr class="item">
-				<td>
-					Nr. linea
-				</td>
-
-				<td>
-					<?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DettaglioLinee->NumeroLinea; ?>
-				</td>
-			</tr>
-			<tr class="item">
-				<td>
-					Descrizione
-				</td>
-
-				<td>
-					<?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DettaglioLinee->Descrizione; ?>
-				</td>
-			</tr>
-			<tr class="item">
-				<td>
-					Quantita
-				</td>
-
-				<td>
-					<?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DettaglioLinee->Quantita; ?>
-				</td>
-			</tr>
-			<tr class="item">
-				<td>
-					Prezzo Unitario
-				</td>
-
-				<td>
-					<?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DettaglioLinee->PrezzoUnitario; ?>
-				</td>
-			</tr>
-			<tr class="item">
-				<td>
-					Prezzo totale
-				</td>
-
-				<td>
-					<?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DettaglioLinee->PrezzoTotale; ?>
-				</td>
-			</tr>
-			<tr class="item">
-				<td>
-					Aliquota IVA
-				</td>
-
-				<td>
-					<?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DettaglioLinee->AliquotaIVA; ?>
-				</td>
-			</tr>			
-			<!-- fine foreach -->
-			<!-- fine dettaglio linee -->
-            <!-- inizio riepilogo -->
-            <tr class="heading">
-                <td colspan="2">
-                    Dati riepilogo
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    Aliquota IVA
-                </td>
-
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DatiRiepilogo->AliquotaIVA; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    Imponibile Importo
-                </td>
-
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DatiRiepilogo->ImponibileImporto; ?>
-                </td>
-            </tr>
-             <tr class="item">
-                <td>
-                    Imposta
-                </td>
-
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DatiRiepilogo->Imposta; ?>
-                </td>
-            </tr>
-             <tr class="item">
-                <td>
-                    EsigibilitaIVA
-                </td>
-
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiBeniServizi->DatiRiepilogo->EsigibilitaIVA; ?>
-                </td>
-            </tr>
-            <!-- fine dati riepilogo -->
-            <!-- inizio DatiPagamento -->
-            <tr class="heading">
-                <td colspan="2">
-                    Dati pagamento
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    Condizioni pagamento
-                </td>
-
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiPagamento->CondizioniPagamento; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    Modalità pagamento
-                </td>
-
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiPagamento->DettaglioPagamento->ModalitaPagamento; ?>
-                </td>
-            </tr>
-            <tr class="item">
-                <td>
-                    DataScadenzaPagamento
-                </td>
-
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiPagamento->DettaglioPagamento->DataScadenzaPagamento; ?>
-                </td>
-            </tr>
-            <tr class="total">
-                <td>
-                    Importo Pagamento
-                </td>
-
-                <td>
-                    <?php echo $data->FatturaElettronicaBody->DatiPagamento->DettaglioPagamento->ImportoPagamento; ?>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="centered">
-                    <small>Fattura generata dal file <?php echo(basename( $_FILES["fileToUpload"]["name"])); ?><small>
-                </td>
-            </tr>            
-        </table>
         
+            <tr class="information">
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <b>Dati Trasporto</b><br>
+                                            Id Paese: <?php echo $IdPaeseTrasporto; ?><br>
+                                            Id Codice: <?php echo $IdCodiceTrasporto; ?><br>
+                                            Anagrafica: <?php echo $AnagraficaTrasporto; ?><br>
+                                            Data Ora Consegna: <?php echo $DataOra; ?><br>
+                                        
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+<tr class="information">
+                            <td colspan="4">
+                            <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">N° Linea</th>
+      <th scope="col">Descrizione</th>
+      <th scope="col">Quantita</th>
+      <th scope="col">Prezzo Unitario</th>
+      <th scope="col">Prezzo Totale</th>
+      <th scope="col">Aliquota IVA</th>
+    </tr>
+  </thead>
+  <tbody>
+
+<?php 
+
+foreach($NumeroLineaRiga->DettaglioLinee as $rigaFattura){ 
+    
+    //var_dump( $rigaFattura); 
+    
+    ?>
+
+    <tr>
+      <th scope="row"><?php echo $rigaFattura->NumeroLinea; ?></th>
+      <td><?php echo $rigaFattura->Descrizione; ?></td>
+      <td><?php echo $rigaFattura->Quantita; ?></td>
+      <td><?php echo $rigaFattura->PrezzoUnitario; ?></td>
+      <td><?php echo $rigaFattura->PrezzoTotale; ?></td>
+      <td><?php echo $rigaFattura->AliquotaIVA; ?></td>
+    </tr>
+
+<?php } ?> 
+
+  </tbody>
+</table>
+                            </td>
+                        </tr>
+
+<tr class="information">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                <b>Dati Riepilogo</b><br>
+                                Aliquota IVA: <?php echo $AliquotaIVARiepilogo; ?><br>
+                                Imponibile Importo: <?php echo $ImponibileImportoRiepilogo; ?><br>
+                                Imposta: <?php echo $ImpostaRiepilogo; ?><br>
+                                Esigibilità IVA: <?php echo $EsigibilitaIVARiepilogo; ?><br>
+                         
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+<tr class="information">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                <b>Dati Pagamento</b><br>
+                                Condizioni Pagamento: <?php echo $CondizioniPagamentoRiepilogo; ?><br>
+                                Modalità Pagamento: <?php echo $ModalitaPagamentoRiepilogo; ?><br>
+                                Data Scadenza Pagamento: <?php echo $DataScadenzaPagamentoRiepilogo; ?><br>
+                                Importo Pagamento Riepilogo :  <?php echo $ImportoPagamentoRiepilogo; ?><br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+ 
+
     </div>
-</body>
-</html>
+
+<?php endif ?>
