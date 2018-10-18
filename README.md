@@ -9,7 +9,7 @@ La documentazione ufficiale è presente al seguente url http://www.fatturapa.gov
 
 # SDIFTP
 
-consente di interagire tramite la trasmissione via FPT. 
+consente di interagire tramite la trasmissione via FTP. 
 La documentazione ufficiale è presente al seguente url http://www.fatturapa.gov.it/export/fatturazione/it/normativa/f-3.htm, mentre per le specifiche del pacchetto PHP si rimanda al rispettivo README.
 
 # utils
